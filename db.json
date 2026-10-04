@@ -1,0 +1,19 @@
+{
+  "products": [],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@marketplace.uz",
+      "phone": "+998 90 123 45 67",
+      "telegram_username": "Mdmnv_77",
+      "role": "admin",
+      "is_verified": 1,
+      "is_blocked": 0,
+      "created_at": "2026-10-03T15:05:14.516Z"
+    }
+  ],
+  "reviews": [],
+  "messages": [],
+  "favorites": []
+}

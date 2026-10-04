@@ -1,0 +1,17 @@
+{
+  "name": "elonuz-marketplace",
+  "version": "1.0.0",
+  "description": "E'lonUZ — O'zbekistonning Yetakchi E'lonlar Sayti",
+  "scripts": {
+    "start": "node server/src/index.js",
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+    "server": "node server/src/index.js",
+    "client": "npm --prefix client run dev"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": ["marketplace", "elonlar", "olx", "ecommerce", "uzbekistan"],
+  "author": "",
+  "license": "ISC"
+}
