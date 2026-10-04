@@ -86,15 +86,14 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'register', i
         className="bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative border border-gray-100 dark:border-slate-800 transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button (only if not strictly mandatory initial welcome) */}
-        {!isMandatory && (
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+          title="Yopish va e'lonlarni ko'rish"
+        >
+          <X className="w-5 h-5" />
+        </button>
 
         {/* Welcome Banner */}
         <div className="pt-6 px-6 text-center">
@@ -370,16 +369,14 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'register', i
           )}
 
           {/* Guest browsing link */}
-          {isMandatory && (
-            <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-800 text-center">
-              <button
-                onClick={onClose}
-                className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-slate-300 underline cursor-pointer"
-              >
-                Mehmon sifatida ko'rish (keyinroq ro'yxatdan o'tish)
-              </button>
-            </div>
-          )}
+          <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-800 text-center">
+            <button
+              onClick={onClose}
+              className="text-xs text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 font-semibold hover:underline cursor-pointer"
+            >
+              👀 Ro'yxatdan o'tmasdan e'lonlarni ko'rish
+            </button>
+          </div>
 
         </div>
       </div>

@@ -98,26 +98,51 @@ export default function CreateProductModal({
   };
 
   const handleFileUpload = async (e) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    const fileList = Array.from(e.target.files || []);
+    if (fileList.length === 0) return;
 
     setUploading(true);
     setError('');
 
-    const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('images', files[i]);
-    }
+    const compressFile = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxDim = 800;
+            let width = img.width;
+            let height = img.height;
+            if (width > height && width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+            resolve(dataUrl);
+          };
+          img.onerror = () => reject(new Error('Rasmni o\'qib bo\'lmadi'));
+          img.src = event.target.result;
+        };
+        reader.onerror = () => reject(new Error('Faylni o\'qib bo\'lmadi'));
+        reader.readAsDataURL(file);
+      });
 
     try {
-      const data = await api.uploadImages(formData);
-      if (data.urls && data.urls.length > 0) {
-        setImages(prev => [...prev, ...data.urls]);
-      }
+      const compressedUrls = await Promise.all(fileList.map(compressFile));
+      setImages((prev) => [...prev, ...compressedUrls]);
     } catch (err) {
       setError(err.message || 'Rasmlarni yuklashda xatolik yuz berdi');
     } finally {
       setUploading(false);
+      e.target.value = '';
     }
   };
 

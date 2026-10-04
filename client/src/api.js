@@ -35,7 +35,24 @@ const SEED_CATEGORIES = [
 let _dbCache = null;
 let _dbSha = null;
 let _cacheTime = 0;
-const CACHE_TTL = 8000; // 8 seconds cache to reduce API calls
+function unicodeToB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+function b64DecodeUnicode(str) {
+  const clean = str.replace(/\s/g, '');
+  const binary = atob(clean);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new TextDecoder().decode(bytes);
+}
 
 async function ghGet() {
   const now = Date.now();
@@ -50,7 +67,7 @@ async function ghGet() {
   });
   if (!res.ok) throw new Error('DB o\'qishda xato');
   const json = await res.json();
-  const content = JSON.parse(atob(json.content.replace(/\n/g, '')));
+  const content = JSON.parse(b64DecodeUnicode(json.content));
   _dbCache = content;
   _dbSha = json.sha;
   _cacheTime = now;
@@ -58,7 +75,7 @@ async function ghGet() {
 }
 
 async function ghPut(db, sha) {
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(db, null, 2))));
+  const content = unicodeToB64(JSON.stringify(db, null, 2));
   const res = await fetch(`${GH_API}/repos/${GH_REPO}/contents/${GH_DB_PATH}`, {
     method: 'PUT',
     headers: {
@@ -426,24 +443,31 @@ async function githubApiHandler(endpoint, options = {}) {
   if (chatMatch && method === 'GET') {
     if (!currentUser) return { messages: [] };
     const otherId = parseInt(chatMatch[1]);
+    const otherUser = db.users.find(u => u.id === otherId) || { id: otherId, username: 'Foydalanuvchi' };
     const chat = db.messages.filter(m =>
       (m.sender_id === currentUser.id && m.receiver_id === otherId) ||
       (m.sender_id === otherId && m.receiver_id === currentUser.id)
-    );
+    ).map(m => ({
+      ...m,
+      message: m.message || m.content || '',
+      content: m.content || m.message || ''
+    }));
     chat.forEach(m => { if (m.receiver_id === currentUser.id) m.is_read = 1; });
     // update read status in background
     ghPut(db, sha).catch(() => {});
-    return { messages: chat };
+    return { messages: chat, other_user: otherUser };
   }
 
   if (endpoint === '/messages' && method === 'POST') {
     if (!currentUser) throw new Error('Avtorizatsiya talab etiladi');
+    const msgText = body.message || body.content || '';
     const newMsg = {
       id: Date.now(),
       sender_id: currentUser.id,
       receiver_id: parseInt(body.receiver_id),
       product_id: body.product_id ? parseInt(body.product_id) : null,
-      content: body.content || '',
+      content: msgText,
+      message: msgText,
       msg_type: body.msg_type || 'text',
       audio_url: body.audio_url || null,
       is_read: 0,
