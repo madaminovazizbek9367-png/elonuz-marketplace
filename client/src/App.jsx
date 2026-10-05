@@ -310,43 +310,90 @@ export default function App() {
     filterVideo ? 'video' : null
   ].filter(Boolean).length;
 
+  const isInsideIframe = typeof window !== 'undefined' && window.self !== window.top;
+
+  // If mobile or tablet preview mode is selected on the main window, render inside real device frame!
+  if (!isInsideIframe && deviceMode !== 'desktop') {
+    const iframeUrl = window.location.origin + window.location.pathname;
+
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-start overflow-y-auto p-4 pt-16 relative">
+        {/* Device Switcher Toolbar */}
+        <DeviceSimulatorToolbar
+          deviceMode={deviceMode}
+          setDeviceMode={setDeviceMode}
+          isLandscape={isLandscape}
+          setIsLandscape={setIsLandscape}
+          scale={deviceScale}
+          setScale={setDeviceScale}
+        />
+
+        {/* Ambient Glow */}
+        <div className="fixed top-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Real Hardware Frame with actual live responsive viewport */}
+        <div
+          className="relative transition-all duration-300 my-auto shadow-2xl"
+          style={{
+            transform: `scale(${deviceScale})`,
+            transformOrigin: 'top center',
+            width: deviceMode === 'mobile'
+              ? (isLandscape ? '844px' : '390px')
+              : (isLandscape ? '1024px' : '768px'),
+            height: deviceMode === 'mobile'
+              ? (isLandscape ? '440px' : '844px')
+              : (isLandscape ? '768px' : '980px'),
+            borderRadius: deviceMode === 'mobile' ? '54px' : '32px',
+            border: deviceMode === 'mobile' ? '12px solid #1e293b' : '14px solid #1e293b',
+            boxShadow: '0 0 0 2px #475569, 0 35px 90px rgba(0,0,0,0.85)',
+            background: '#020617',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          {/* Dynamic Island on Phone */}
+          {deviceMode === 'mobile' && !isLandscape && (
+            <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-50 w-28 h-7 bg-black rounded-full pointer-events-none flex items-center justify-between px-3 border border-slate-900 shadow-md">
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800" />
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-900" />
+            </div>
+          )}
+
+          {/* Front Camera on Tablet */}
+          {deviceMode === 'tablet' && (
+            <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-50 w-2.5 h-2.5 bg-black rounded-full pointer-events-none border border-slate-800" />
+          )}
+
+          {/* The Live Responsive Website */}
+          <iframe
+            src={iframeUrl}
+            title="E'lonUZ Live Device Preview"
+            className="w-full h-full border-none flex-1 bg-white dark:bg-slate-950"
+          />
+
+          {/* iPhone Home indicator bar */}
+          {deviceMode === 'mobile' && !isLandscape && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-50 w-32 h-1 bg-white/40 rounded-full pointer-events-none" />
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       
-      {/* 📱 Device Simulator Toolbar — floating top bar */}
-      <DeviceSimulatorToolbar
-        deviceMode={deviceMode}
-        setDeviceMode={setDeviceMode}
-        isLandscape={isLandscape}
-        setIsLandscape={setIsLandscape}
-        scale={deviceScale}
-        setScale={setDeviceScale}
-      />
-
-      {/* Device Frame Wrapper — shows phone/tablet frame border around the site */}
-      {deviceMode !== 'desktop' && (
-        <div className="fixed inset-0 z-[90] pointer-events-none flex items-start justify-center pt-[72px] pb-4 px-4">
-          <div
-            style={{
-              width: deviceMode === 'mobile'
-                ? (isLandscape ? '720px' : '390px')
-                : (isLandscape ? '1024px' : '768px'),
-              height: 'calc(100vh - 100px)',
-              borderRadius: deviceMode === 'mobile' ? '44px' : '22px',
-              border: deviceMode === 'mobile' ? '8px solid #1e293b' : '7px solid #1e293b',
-              boxShadow: '0 0 0 2px #475569, 0 30px 80px rgba(0,0,0,0.9)',
-              transform: `scale(${deviceScale})`,
-              transformOrigin: 'top center',
-              pointerEvents: 'none',
-              background: 'transparent',
-              position: 'relative'
-            }}
-          >
-            {deviceMode === 'mobile' && !isLandscape && (
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-50" />
-            )}
-          </div>
-        </div>
+      {/* 📱 Device Simulator Toolbar — only rendered on parent desktop view */}
+      {!isInsideIframe && (
+        <DeviceSimulatorToolbar
+          deviceMode={deviceMode}
+          setDeviceMode={setDeviceMode}
+          isLandscape={isLandscape}
+          setIsLandscape={setIsLandscape}
+          scale={deviceScale}
+          setScale={setDeviceScale}
+        />
       )}
 
       {/* Toast Notification */}
