@@ -237,13 +237,25 @@ export default function ProductDetailModal({
         className="bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 rounded-3xl w-full max-w-5xl max-h-[92vh] overflow-y-auto shadow-2xl flex flex-col relative border border-transparent dark:border-slate-800 transition-colors"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2.5 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-700 text-gray-700 dark:text-slate-200 rounded-full shadow-md backdrop-blur-md transition-all cursor-pointer"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        {/* Favorite & Close Buttons */}
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+          {product && (
+            <button
+              onClick={() => onToggleFavorite?.(product.id)}
+              title={product.is_favorited ? "Sevimlilardan o'chirish" : "Sevimlilarga saqlash"}
+              className="p-2.5 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-700 text-gray-700 dark:text-slate-200 rounded-full shadow-md backdrop-blur-md transition-all cursor-pointer"
+            >
+              <Heart className={`w-5 h-5 ${product.is_favorited ? 'fill-rose-500 text-rose-500' : 'text-gray-600 dark:text-slate-300'}`} />
+            </button>
+          )}
+          <button
+            onClick={onClose}
+            className="p-2.5 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-700 text-gray-700 dark:text-slate-200 rounded-full shadow-md backdrop-blur-md transition-all cursor-pointer"
+            title="Yopish"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         {loading ? (
           <div className="p-20 flex flex-col items-center justify-center gap-4">

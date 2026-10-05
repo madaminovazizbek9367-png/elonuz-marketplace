@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Bot, Sparkles, Send, CheckCircle2, TrendingDown, RefreshCcw, Handshake } from 'lucide-react';
+import { X, Bot, Sparkles, Send, CheckCircle2, RefreshCcw, Handshake } from 'lucide-react';
 
 export default function BargainBotModal({ isOpen, onClose, product, onApplyAgreedPrice }) {
   if (!isOpen || !product) return null;
@@ -8,20 +8,19 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
   const currency = product.currency || 'UZS';
 
   const [offerPrice, setOfferPrice] = useState('');
+  const [lastBotCounter, setLastBotCounter] = useState(null);
   const [messages, setMessages] = useState([
     {
       id: 1,
       sender: 'bot',
-      text: `Assalomu alaykum! Men "${product.title}" sotuvchisining AI yordamchisiman. Mahsulotimiz narxi hozirda ${currentPrice.toLocaleString()} ${currency}. Qancha narxga olmoqchisiz? Bemalol savdolashing!`
+      text: `Assalomu alaykum! Men "${product.title}" sotuvchisining AI savdo yordamchisiman. Mahsulotimiz narxi ${currentPrice.toLocaleString()} ${currency}. Qancha narxga olmoqchisiz? Bemalol o'z taklifingizni bildiring!`
     }
   ]);
   const [dealAgreed, setDealAgreed] = useState(false);
   const [agreedAmount, setAgreedAmount] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleMakeOffer = (e) => {
-    e?.preventDefault();
-    const offered = Number(offerPrice);
+  const processOffer = (offered) => {
     if (!offered || offered <= 0) return;
 
     // Add user message
@@ -38,58 +37,74 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
       setIsTyping(false);
       const ratio = offered / currentPrice;
 
-      if (ratio >= 0.92) {
-        // Accept immediately
+      // 1. If user matches or exceeds bot's previous counter-offer OR offers >= 85% of price
+      if ((lastBotCounter && offered >= lastBotCounter) || ratio >= 0.85) {
+        const finalPrice = Math.min(offered, currentPrice);
         setDealAgreed(true);
-        setAgreedAmount(offered);
+        setAgreedAmount(finalPrice);
+        setLastBotCounter(null);
         setMessages(prev => [
           ...prev,
           {
             id: Date.now() + 1,
             sender: 'bot',
-            text: `🎉 Ajoyib! Barakasini bersin! Siz aytgan ${offered.toLocaleString()} ${currency} narxiga kelishdik! Rasmiy savdo chekini shakllantirishingiz va sotuvchi bilan bog'lanishingiz mumkin.`,
+            text: `🎉 Ajoyib! Barakasini bersin! Siz aytgan ${finalPrice.toLocaleString()} ${currency} narxiga kelishdik! Rasmiy savdo chekini shakllantirishingiz mumkin.`,
             isDeal: true
           }
         ]);
-      } else if (ratio >= 0.75) {
-        // Counter-offer
-        const counter = Math.round((currentPrice + offered) / 2);
+      } else if (ratio >= 0.65) {
+        // Reasonable discount request: Bot offers a fair middle price (around 85%-88% of original)
+        const counter = Math.round(currentPrice * 0.88);
+        setLastBotCounter(counter);
         setMessages(prev => [
           ...prev,
           {
             id: Date.now() + 1,
             sender: 'bot',
-            text: `Taklifingiz uchun rahmat! Lekin ${offered.toLocaleString()} ${currency} biroz kamlik qiladi. Keling, ikkalamizga ham ma'qul bo'lishi uchun ${counter.toLocaleString()} ${currency} ga kelishamiz, nima deysiz?`
+            text: `Taklifingiz uchun rahmat! Lekin ${offered.toLocaleString()} ${currency} biroz kam. Keling, ikkalamizga ham ma'qul bo'lishi uchun oxirgi narx ${counter.toLocaleString()} ${currency} ga kelishamiz, rozimisiz?`,
+            counterPrice: counter
           }
         ]);
-      } else if (ratio >= 0.50) {
-        // Low offer
-        const counter = Math.round(currentPrice * 0.88);
+      } else if (ratio >= 0.40) {
+        // Low offer: Bot offers 90% floor
+        const counter = Math.round(currentPrice * 0.90);
+        setLastBotCounter(counter);
         setMessages(prev => [
           ...prev,
           {
             id: Date.now() + 1,
             sender: 'bot',
-            text: `Aka, bu narx juda past bo'lib ketdi. Mahsulotimiz holati a'lo darajada. Eng kami ${counter.toLocaleString()} ${currency} qilib berishim mumkin. Qani yana ozgina ko'taring!`
+            text: `Bu narx ancha past. Mahsulotimiz holati juda yaxshi. Eng kami ${counter.toLocaleString()} ${currency} ga bera olaman. Rozimisiz?`,
+            counterPrice: counter
           }
         ]);
       } else {
-        // Unrealistic offer
+        // Very low unrealistic offer
         setMessages(prev => [
           ...prev,
           {
             id: Date.now() + 1,
             sender: 'bot',
-            text: `Bunday arzon narxga imkonsiz! Hatto tannarxiga ham to'g'ri kelmaydi. Haqiqiy va munosib taklif bildiring.`
+            text: `Kechirasiz, ${offered.toLocaleString()} ${currency} juda ham kam. Iltimos, real va munosib narx taklif qiling.`
           }
         ]);
       }
-    }, 900);
+    }, 600);
+  };
+
+  const handleMakeOffer = (e) => {
+    e?.preventDefault();
+    processOffer(Number(offerPrice));
   };
 
   const handleQuickPercent = (pct) => {
     const discounted = Math.round(currentPrice * (1 - pct / 100));
     setOfferPrice(String(discounted));
+    processOffer(discounted);
+  };
+
+  const handleAcceptBotCounter = (counterPrice) => {
+    processOffer(counterPrice);
   };
 
   return (
@@ -154,10 +169,10 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
           {messages.map((m) => (
             <div
               key={m.id}
-              className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'}`}
             >
               <div
-                className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed shadow-xs ${
+                className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed shadow-xs ${
                   m.sender === 'user'
                     ? 'bg-emerald-600 text-white rounded-br-xs'
                     : m.isDeal
@@ -167,6 +182,18 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
               >
                 <p className="whitespace-pre-line">{m.text}</p>
               </div>
+
+              {/* One-click accept bot counter button */}
+              {m.counterPrice && !dealAgreed && (
+                <button
+                  type="button"
+                  onClick={() => handleAcceptBotCounter(m.counterPrice)}
+                  className="mt-1.5 px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-bold shadow-xs flex items-center gap-1 cursor-pointer transition-all animate-pulse"
+                >
+                  <Handshake className="w-3.5 h-3.5" />
+                  <span>Roziman, {m.counterPrice.toLocaleString()} {currency} ga kelishamiz!</span>
+                </button>
+              )}
             </div>
           ))}
 
@@ -181,8 +208,8 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
         {/* Quick discount buttons */}
         {!dealAgreed && (
           <div className="px-4 py-2 bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 flex items-center gap-1.5 overflow-x-auto text-[11px] font-bold">
-            <span className="text-gray-400 shrink-0">Tezkor taklif:</span>
-            {[5, 10, 15, 20].map((pct) => (
+            <span className="text-gray-400 shrink-0">Chegirma so'rash:</span>
+            {[5, 10, 15].map((pct) => (
               <button
                 key={pct}
                 type="button"
@@ -208,7 +235,7 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
                 className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-black shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
                 <Handshake className="w-4 h-4" />
-                <span>Ushbu kelishilgan narxni qabul qilish</span>
+                <span>Ushbu kelishilgan narxni qabul qilish ({agreedAmount?.toLocaleString()} {currency})</span>
               </button>
 
               <button
@@ -216,6 +243,7 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
                 onClick={() => {
                   setDealAgreed(false);
                   setAgreedAmount(null);
+                  setLastBotCounter(null);
                   setMessages(prev => [
                     ...prev,
                     { id: Date.now(), sender: 'bot', text: 'Savdoni yangitdan boshlaymiz. Qancha taklif qilasiz?' }
@@ -235,7 +263,7 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
                 required
                 value={offerPrice}
                 onChange={(e) => setOfferPrice(e.target.value)}
-                placeholder={`Taklif narxini kiriting (${currency})...`}
+                placeholder={`O'z taklifingizni yozing (${currency})...`}
                 className="flex-1 px-4 py-2.5 text-xs rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 focus:outline-none focus:border-emerald-500 text-gray-900 dark:text-white"
               />
               <button
@@ -244,7 +272,7 @@ export default function BargainBotModal({ isOpen, onClose, product, onApplyAgree
                 className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-2xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-600/25 transition-all cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>Yuborish</span>
+                <span>Taklif qilish</span>
               </button>
             </form>
           )}

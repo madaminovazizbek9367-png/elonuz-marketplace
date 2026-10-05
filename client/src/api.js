@@ -205,18 +205,29 @@ async function githubApiHandler(endpoint, options = {}) {
 
   if (endpoint === '/auth/register' && method === 'POST') {
     const { username, email, phone, password, avatar_url, telegram_username } = body;
-    if (!username || !email || !password) throw new Error('Barcha maydonlarni to\'ldiring');
-    if (db.users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-      throw new Error('Bu username allaqachon band!');
+    if (!username || !email || !password) throw new Error('Iltimos, barcha majburiy maydonlarni to\'ldiring');
+    
+    const cleanUsername = String(username).trim().toLowerCase();
+    const cleanEmail = String(email).trim().toLowerCase();
+    const cleanTg = telegram_username ? String(telegram_username).trim().replace('@', '').toLowerCase() : '';
+
+    if (db.users.some(u => u.username && u.username.toLowerCase() === cleanUsername)) {
+      throw new Error('Ushbu foydalanuvchi nomi (username) allaqachon ro\'yxatdan o\'tgan! Boshqa nom tanlang.');
     }
-    if (db.users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-      throw new Error('Bu email allaqachon ro\'yxatdan o\'tgan!');
+    if (db.users.some(u => u.email && u.email.toLowerCase() === cleanEmail)) {
+      throw new Error('Ushbu email manzil allaqachon band! Boshqa email kiriting.');
     }
+    if (cleanTg && db.users.some(u => u.telegram_username && u.telegram_username.replace('@', '').toLowerCase() === cleanTg)) {
+      throw new Error('Ushbu Telegram username allaqachon boshqa foydalanuvchi tomonidan kiritilgan!');
+    }
+
     const newUser = {
       id: Date.now(),
-      username, email, phone,
+      username: String(username).trim(),
+      email: String(email).trim(),
+      phone: phone ? String(phone).trim() : '+998 90 000 00 00',
       avatar_url: avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${username}`,
-      telegram_username: telegram_username || null,
+      telegram_username: cleanTg ? `@${cleanTg}` : null,
       role: 'user',
       is_verified: 0,
       is_blocked: 0,
@@ -433,26 +444,28 @@ async function githubApiHandler(endpoint, options = {}) {
   }
 
   // ── Favorites ─────────────────────────────────────────────────────────────
-
   if (endpoint === '/favorites' && method === 'GET') {
     if (!currentUser) return { favorites: [] };
-    const userFavIds = db.favorites.filter(f => f.user_id === currentUser.id).map(f => f.product_id);
-    return { favorites: db.products.filter(p => userFavIds.includes(p.id)) };
+    const userFavIds = (db.favorites || [])
+      .filter(f => String(f.user_id) === String(currentUser.id))
+      .map(f => String(f.product_id));
+    return { favorites: (db.products || []).filter(p => userFavIds.includes(String(p.id))) };
   }
 
   if (endpoint.startsWith('/favorites/') && method === 'POST') {
-    if (!currentUser) throw new Error('Tizimga kiring');
-    const prodId = parseInt(endpoint.replace('/favorites/', ''));
-    const existIdx = db.favorites.findIndex(f => f.user_id === currentUser.id && f.product_id === prodId);
+    if (!currentUser) throw new Error('Sevimlilarga saqlash uchun avval tizimga kiring');
+    const prodId = endpoint.replace('/favorites/', '').trim();
+    if (!db.favorites) db.favorites = [];
+    const existIdx = db.favorites.findIndex(f => String(f.user_id) === String(currentUser.id) && String(f.product_id) === String(prodId));
     let favorited = false;
     if (existIdx > -1) {
       db.favorites.splice(existIdx, 1);
     } else {
-      db.favorites.push({ user_id: currentUser.id, product_id: prodId });
+      db.favorites.push({ user_id: currentUser.id, product_id: Number(prodId) || prodId });
       favorited = true;
     }
     await ghPut(db, sha);
-    return { favorited, message: favorited ? 'Sevimlilarga qo\'shildi' : 'Sevimlilardan olib tashlandi' };
+    return { favorited, message: favorited ? '❤️ Sevimlilarga saqlandi!' : 'Sevimlilardan olib tashlandi' };
   }
 
   // ── Messages ──────────────────────────────────────────────────────────────
