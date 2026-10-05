@@ -304,11 +304,15 @@ async function githubApiHandler(endpoint, options = {}) {
       return {
         product: {
           ...p,
-          views: db.products[pidx].views,
+          seller_id: p.user_id,
+          user_id: p.user_id,
+          views: db.products[pidx].views || 0,
+          views_count: db.products[pidx].views || 0,
           seller_username: seller.username || 'Foydalanuvchi',
           seller_avatar: seller.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${seller.username || 'u'}`,
           seller_phone: seller.phone || '+998 90 000 00 00',
           seller_verified: seller.is_verified || 0,
+          seller_is_verified: seller.is_verified || 0,
           seller_telegram: seller.telegram_username || null,
           seller_rating: avgRating ? parseFloat(avgRating) : null,
           seller_reviews_count: sellerReviews.length,
@@ -357,10 +361,15 @@ async function githubApiHandler(endpoint, options = {}) {
       const isFav = currentUser ? db.favorites.some(f => f.user_id === currentUser.id && f.product_id === p.id) : false;
       return {
         ...p,
+        seller_id: p.user_id,
+        user_id: p.user_id,
+        views: p.views || 0,
+        views_count: p.views || 0,
         seller_username: seller.username || 'Foydalanuvchi',
         seller_avatar: seller.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${seller.username || 'u'}`,
         seller_phone: seller.phone || '+998 90 000 00 00',
         seller_verified: seller.is_verified || 0,
+        seller_is_verified: seller.is_verified || 0,
         seller_telegram: seller.telegram_username || null,
         seller_rating: avgRating ? parseFloat(avgRating) : null,
         seller_reviews_count: sellerReviews.length,
@@ -515,30 +524,42 @@ async function githubApiHandler(endpoint, options = {}) {
   const reviewMatch = endpoint.match(/^\/reviews\/seller\/(\d+)$/);
   if (reviewMatch && method === 'GET') {
     const sellerId = parseInt(reviewMatch[1]);
-    const revs = db.reviews.filter(r => r.seller_id === sellerId).map(r => {
+    const revs = (db.reviews || []).filter(r => r.seller_id === sellerId).map(r => {
       const reviewer = db.users.find(u => u.id === r.reviewer_id) || {};
       return {
         ...r,
-        reviewer_name: reviewer.username || 'Xaridor',
-        reviewer_avatar: reviewer.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${reviewer.username || 'u'}`
+        reviewer_name: reviewer.username || r.reviewer_username || 'Xaridor',
+        reviewer_username: reviewer.username || r.reviewer_username || 'Xaridor',
+        reviewer_avatar: reviewer.avatar_url || r.reviewer_avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${reviewer.username || 'u'}`
       };
     });
-    const avg = revs.length > 0 ? (revs.reduce((a, b) => a + b.rating, 0) / revs.length).toFixed(1) : 0;
-    return { reviews: revs, averageRating: parseFloat(avg) || 0, totalReviews: revs.length };
+    const avg = revs.length > 0 ? (revs.reduce((a, b) => a + b.rating, 0) / revs.length).toFixed(1) : 5.0;
+    return {
+      reviews: revs,
+      averageRating: parseFloat(avg) || 5.0,
+      avg_rating: parseFloat(avg) || 5.0,
+      totalReviews: revs.length,
+      total_reviews: revs.length
+    };
   }
 
   if (endpoint === '/reviews' && method === 'POST') {
-    if (!currentUser) throw new Error('Sharh qoldirish uchun tizimga kiring');
+    if (!currentUser) throw new Error('Sharh qoldirish uchun avval tizimga kiring');
     const { seller_id, rating, comment } = body;
-    if (currentUser.id === parseInt(seller_id)) throw new Error('O\'zingizga sharh qoldira olmaysiz');
+    const sId = parseInt(seller_id);
+    if (!sId) throw new Error('Sotuvchi aniqlanmadi');
+    if (currentUser.id === sId) throw new Error('O\'zingizning e\'loningizga sharh qoldira olmaysiz');
     const newRev = {
       id: Date.now(),
-      seller_id: parseInt(seller_id),
+      seller_id: sId,
       reviewer_id: currentUser.id,
-      rating: parseInt(rating),
-      comment: comment || '',
+      reviewer_username: currentUser.username,
+      reviewer_avatar: currentUser.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser.username}`,
+      rating: parseInt(rating) || 5,
+      comment: comment ? String(comment).trim() : '',
       created_at: new Date().toISOString()
     };
+    if (!db.reviews) db.reviews = [];
     db.reviews.unshift(newRev);
     await ghPut(db, sha);
     return { message: 'Sharhingiz qabul qilindi', review: newRev };

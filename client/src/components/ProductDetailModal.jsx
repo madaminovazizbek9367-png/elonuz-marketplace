@@ -83,8 +83,11 @@ export default function ProductDetailModal({
     if (!sellerId) return;
     api.getSellerReviews(sellerId)
       .then(res => {
-        setSellerReviews(res.reviews || []);
-        setReviewsStats({ total_reviews: res.total_reviews, avg_rating: res.avg_rating });
+        const revs = res.reviews || [];
+        setSellerReviews(revs);
+        const total = res.totalReviews ?? res.total_reviews ?? revs.length;
+        const avg = res.averageRating ?? res.avg_rating ?? (revs.length > 0 ? (revs.reduce((a, b) => a + b.rating, 0) / revs.length).toFixed(1) : 5.0);
+        setReviewsStats({ total_reviews: total, avg_rating: avg });
       })
       .catch(() => {});
   };
@@ -103,8 +106,9 @@ export default function ProductDetailModal({
       .then(res => {
         setProduct(res.product);
         setActiveImageIndex(0);
-        if (res.product?.seller_id) {
-          loadSellerReviews(res.product.seller_id);
+        const sId = res.product?.seller_id || res.product?.user_id;
+        if (sId) {
+          loadSellerReviews(sId);
         }
       })
       .catch(err => {
@@ -179,7 +183,19 @@ export default function ProductDetailModal({
   // Submit review for seller (Feature 2)
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    if (!product?.seller_id || !user) return;
+    const sellerId = product?.seller_id || product?.user_id;
+    if (!sellerId) {
+      alert('Sotuvchi ma\'lumotlari topilmadi');
+      return;
+    }
+    if (!user) {
+      alert('Sharh va baho (yulduzcha) qoldirish uchun avval tizimga kiring!');
+      return;
+    }
+    if (user.id === sellerId) {
+      alert('O\'zingizning e\'loningizga o\'zingiz sharh qoldira olmaysiz.');
+      return;
+    }
     if (!reviewComment.trim()) {
       alert('Sharh matnini kiriting');
       return;
@@ -188,14 +204,14 @@ export default function ProductDetailModal({
     setSubmittingReview(true);
     try {
       await api.submitReview({
-        seller_id: product.seller_id,
+        seller_id: sellerId,
         rating: reviewRating,
         comment: reviewComment.trim()
       });
       setShowReviewModal(false);
       setReviewComment('');
-      loadSellerReviews(product.seller_id);
-      alert('Rahmat! Sharhingiz muvaffaqiyatli saqlandi.');
+      loadSellerReviews(sellerId);
+      alert('Rahmat! Bahoyingiz va sharhingiz muvaffaqiyatli saqlandi! ⭐');
     } catch (err) {
       alert(err.message || 'Sharh qoldirishda xatolik yuz berdi');
     } finally {
@@ -536,14 +552,23 @@ export default function ProductDetailModal({
                       </div>
                     </div>
 
-                    {user && user.id !== product.seller_id && (
-                      <button
-                        onClick={() => setShowReviewModal(true)}
-                        className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1.5 rounded-xl cursor-pointer"
-                      >
-                        ⭐ Sharh qoldirish
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        if (!user) {
+                          alert('Sharh va yulduzcha (baho) qoldirish uchun avval tizimga kiring!');
+                          return;
+                        }
+                        const sId = product.seller_id || product.user_id;
+                        if (user.id === sId) {
+                          alert('O\'zingizning e\'loningizga sharh qoldira olmaysiz.');
+                          return;
+                        }
+                        setShowReviewModal(true);
+                      }}
+                      className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1.5 rounded-xl cursor-pointer"
+                    >
+                      ⭐ Sharh qoldirish
+                    </button>
                   </div>
 
                   {/* Actions: Call, Telegram, Chat & Make an Offer (Savdolashish) */}
@@ -840,14 +865,23 @@ export default function ProductDetailModal({
                     {reviewsStats.avg_rating} ({reviewsStats.total_reviews} ta sharh)
                   </span>
                 </div>
-                {user && user.id !== product.seller_id && (
-                  <button
-                    onClick={() => setShowReviewModal(true)}
-                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
-                  >
-                    ⭐ Sharh qoldirish
-                  </button>
-                )}
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      alert('Sharh va yulduzcha (baho) qoldirish uchun avval tizimga kiring!');
+                      return;
+                    }
+                    const sId = product.seller_id || product.user_id;
+                    if (user.id === sId) {
+                      alert('O\'zingizning e\'loningizga sharh qoldira olmaysiz.');
+                      return;
+                    }
+                    setShowReviewModal(true);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
+                >
+                  ⭐ Sharh qoldirish
+                </button>
               </div>
 
               {sellerReviews.length === 0 ? (
