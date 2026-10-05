@@ -23,6 +23,18 @@
       "is_verified": 0,
       "is_blocked": 0,
       "created_at": "2026-10-05T14:35:26.698Z"
+    },
+    {
+      "id": 1791205366862,
+      "username": "Aziko_6769",
+      "email": "azizbek67@aziz.com",
+      "phone": "+998 940006769",
+      "avatar_url": "https://api.dicebear.com/7.x/initials/svg?seed=Aziko_6769",
+      "telegram_username": "Mdmnv_77",
+      "role": "user",
+      "is_verified": 0,
+      "is_blocked": 0,
+      "created_at": "2026-10-05T13:02:46.862Z"
     }
   ],
   "products": [
