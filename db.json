@@ -108,7 +108,20 @@
     }
   ],
   "favorites": [],
-  "messages": [],
+  "messages": [
+    {
+      "id": 1791205682074,
+      "sender_id": 1791205366862,
+      "receiver_id": null,
+      "product_id": 1791211166786,
+      "content": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $1 ga sotib olishga tayyorman. Kelishamizmi?",
+      "message": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $1 ga sotib olishga tayyorman. Kelishamizmi?",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-05T13:08:02.074Z"
+    }
+  ],
   "reviews": [
     {
       "id": 1,
