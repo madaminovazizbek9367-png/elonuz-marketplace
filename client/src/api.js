@@ -35,6 +35,8 @@ const SEED_CATEGORIES = [
 let _dbCache = null;
 let _dbSha = null;
 let _cacheTime = 0;
+const CACHE_TTL = 15000; // 15 seconds cache
+
 function unicodeToB64(str) {
   const bytes = new TextEncoder().encode(str);
   let binary = '';
