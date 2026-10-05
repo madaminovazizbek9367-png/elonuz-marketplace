@@ -39,6 +39,40 @@
   ],
   "products": [
     {
+      "id": 1791205644046,
+      "user_id": 1791205366862,
+      "title": "iPhone 20 Pro Max Ultra",
+      "category_id": 3,
+      "price": 2000,
+      "old_price": null,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Namangan",
+      "description": "🌟 Sotiladi: iPhone 20 Pro Max Ultra!\n\n✅ Holati: Yangi, qutisida va kafolatga ega.\n📍 Joylashuv: Namangan.\n💰 Narxi: 2000 USD (real xaridorga ozgina kami bor).\n\nXususiyatlari:\n• 100% original va sifatli\n• Barcha sinov va tekshiruvlardan o'tgan\n• Hech qanday nuqsoni yo'q\n\nQo'shimcha savollar uchun yozing yoki qo'ng'iroq qiling. Shoshiling!",
+      "primary_image": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.IF4KNpf7wUtjyv-XWmfptAHaE8%3Fr%3D0%26pid%3DApi&sp=1791205584Tfd3a90241c80eff117d5d10367699a80c000b8d4e4099dfe8a5afccd9c83c2e3",
+      "images": [
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.IF4KNpf7wUtjyv-XWmfptAHaE8%3Fr%3D0%26pid%3DApi&sp=1791205584Tfd3a90241c80eff117d5d10367699a80c000b8d4e4099dfe8a5afccd9c83c2e3",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.PiqKkvD9Dapq8bH_Cimw6QHaEK%3Fr%3D0%26pid%3DApi&sp=1791205584T568858174f73c14e9e55211352fb90d98e894f272e8dc02684b22e2103b9d5f8",
+          "is_primary": 0
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.yI2SRrgMfrey1sPvRQPKzgHaEK%3Fr%3D0%26pid%3DApi&sp=1791205584T3aff9d20c9b32e7b01452750afbb57ee065ba02be17fa1c171e45e24d11e2c52",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 0,
+      "is_urgent": 0,
+      "video_url": "https://youtu.be/tQfv3e6arXQ?si=f662b4tPKn75aY7x",
+      "extra_details": "{}",
+      "views": 0,
+      "created_at": "2026-10-05T13:07:24.046Z"
+    },
+    {
       "id": 1791211166786,
       "user_id": 1791210926698,
       "title": "BMW M5 F90",
