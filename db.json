@@ -28,7 +28,7 @@
       "id": 1791205366862,
       "username": "Aziko_6769",
       "email": "azizbek67@aziz.com",
-      "phone": "+998 940006769",
+      "phone": "+998 33 803 26 79",
       "avatar_url": "https://api.dicebear.com/7.x/initials/svg?seed=Aziko_6769",
       "telegram_username": "Mdmnv_77",
       "role": "user",
@@ -69,7 +69,7 @@
       "is_urgent": 0,
       "video_url": "https://youtu.be/tQfv3e6arXQ?si=f662b4tPKn75aY7x",
       "extra_details": "{}",
-      "views": 2,
+      "views": 3,
       "created_at": "2026-10-05T13:07:24.046Z"
     },
     {
@@ -103,14 +103,14 @@
       "is_urgent": 0,
       "video_url": null,
       "extra_details": "{}",
-      "views": 6,
+      "views": 8,
       "created_at": "2026-10-05T14:39:26.786Z"
     }
   ],
   "favorites": [
     {
-      "user_id": 1791210926698,
-      "product_id": 1791205644046
+      "user_id": 1791205366862,
+      "product_id": 1791211166786
     }
   ],
   "messages": [
@@ -125,6 +125,30 @@
       "audio_url": null,
       "is_read": 0,
       "created_at": "2026-10-05T13:08:02.074Z"
+    },
+    {
+      "id": 1791205983517,
+      "sender_id": 1791205366862,
+      "receiver_id": null,
+      "product_id": 1791211166786,
+      "content": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $12 ga sotib olishga tayyorman. Kelishamizmi?",
+      "message": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $12 ga sotib olishga tayyorman. Kelishamizmi?",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-05T13:13:03.517Z"
+    },
+    {
+      "id": 1791206026641,
+      "sender_id": 1791205366862,
+      "receiver_id": null,
+      "product_id": 1791211166786,
+      "content": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $3 ga sotib olishga tayyorman. Kelishamizmi?",
+      "message": "🤝 Narx taklifi: Men \"BMW M5 F90\" mahsulotingizni $3 ga sotib olishga tayyorman. Kelishamizmi?",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-05T13:13:46.641Z"
     }
   ],
   "reviews": [
