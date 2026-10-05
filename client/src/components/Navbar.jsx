@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   ShoppingBag, 
   Search, 
@@ -19,7 +20,10 @@ import {
   Send,
   Scale,
   ShieldCheck,
-  Calculator
+  Calculator,
+  Mic,
+  Globe,
+  Truck
 } from 'lucide-react';
 
 export default function Navbar({
@@ -37,17 +41,61 @@ export default function Navbar({
   onOpenSafetyGuide,
   onOpenCurrencyConverter,
   onOpenCompare,
+  onOpenDelivery,
   compareCount = 0,
   locations = []
 }) {
   const { user, logout, favoriteCount, unreadMsgCount } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { lang, toggleLanguage, t } = useLanguage();
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   const handleSearchKey = (e) => {
     if (e.key === 'Enter') {
       onSearchSubmit();
+    }
+  };
+
+  const handleStartVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Kechirasiz, brauzeringiz ovozli qidiruvni qo'llab-quvvatlamaydi (Google Chrome yoki Edge brauzeridan foydalaning)");
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = lang === 'ru' ? 'ru-RU' : 'uz-UZ';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript) {
+          setSearchTerm(transcript);
+          setTimeout(() => {
+            onSearchSubmit();
+          }, 200);
+        }
+      };
+
+      recognition.onerror = () => {
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (e) {
+      setIsListening(false);
     }
   };
 
@@ -87,10 +135,24 @@ export default function Navbar({
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleSearchKey}
-              placeholder="Qidiruv (masalan: telefon, kvartira, mashina)..."
+              placeholder={isListening ? t('voiceSearchListening') : t('searchPlaceholder')}
               className="w-full bg-transparent border-none text-sm text-gray-800 dark:text-slate-100 placeholder-gray-400 dark:placeholder-gray-400 focus:outline-none focus:ring-0 py-1.5"
             />
             
+            {/* Voice Search Button */}
+            <button
+              type="button"
+              onClick={handleStartVoiceSearch}
+              title={isListening ? "Tinglanmoqda... Gapiring" : "Ovozli qidiruv (Mikrofon)"}
+              className={`p-1.5 rounded-xl transition-all cursor-pointer mr-1 ${
+                isListening
+                  ? 'bg-rose-500 text-white animate-pulse shadow-md shadow-rose-500/50 scale-110'
+                  : 'text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-700'
+              }`}
+            >
+              <Mic className={`w-4 h-4 ${isListening ? 'animate-bounce text-white' : ''}`} />
+            </button>
+
             {/* Location selector */}
             <div className="flex items-center border-l border-gray-200 dark:border-slate-700 pl-3 pr-1">
               <MapPin className="w-4 h-4 text-emerald-600 mr-1 shrink-0" />
@@ -99,7 +161,7 @@ export default function Navbar({
                 onChange={(e) => setSelectedLocation(e.target.value)}
                 className="bg-transparent border-none text-xs font-semibold text-gray-700 dark:text-slate-300 focus:outline-none cursor-pointer pr-4"
               >
-                <option value="" className="dark:bg-slate-900">Barcha hududlar</option>
+                <option value="" className="dark:bg-slate-900">{t('allRegions')}</option>
                 {locations.map(loc => (
                   <option key={loc} value={loc} className="dark:bg-slate-900">{loc}</option>
                 ))}
@@ -115,8 +177,28 @@ export default function Navbar({
           </div>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             
+            {/* Language Switcher Button (UZ / RU) */}
+            <button
+              onClick={toggleLanguage}
+              title="Tilni o'zgartirish (O'zbekcha / Русский)"
+              className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-black rounded-2xl bg-gray-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 text-gray-700 dark:text-slate-200 hover:text-emerald-600 border border-gray-200/80 dark:border-slate-700 cursor-pointer transition-all"
+            >
+              <Globe className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{lang.toUpperCase()}</span>
+            </button>
+
+            {/* Yetkazib berish (Delivery Calculator) */}
+            <button
+              onClick={onOpenDelivery}
+              title="Viloyatlararo yetkazib berish kalkulyatori"
+              className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 rounded-2xl transition-colors cursor-pointer border border-blue-200 dark:border-blue-800 text-xs font-bold"
+            >
+              <Truck className="w-3.5 h-3.5 text-blue-600" />
+              <span>{t('delivery')}</span>
+            </button>
+
             {/* Valyuta Kursi & Konvertor */}
             <button
               onClick={onOpenCurrencyConverter}
@@ -134,7 +216,7 @@ export default function Navbar({
               className="hidden md:flex items-center gap-1 px-3 py-1.5 text-slate-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-2xl transition-colors cursor-pointer text-xs font-bold"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Xavfsizlik</span>
+              <span>{t('safety')}</span>
             </button>
 
             {/* E'lonlarni Taqqoslash */}

@@ -17,6 +17,10 @@ import SafetyGuideModal from './components/SafetyGuideModal';
 import CompareModal from './components/CompareModal';
 import CurrencyConverterModal from './components/CurrencyConverterModal';
 import Footer from './components/Footer';
+import DeviceSimulatorToolbar from './components/DeviceSimulatorToolbar';
+import BargainBotModal from './components/BargainBotModal';
+import ReceiptModal from './components/ReceiptModal';
+import DeliveryCalcModal from './components/DeliveryCalcModal';
 
 import { 
   SlidersHorizontal, 
@@ -100,6 +104,24 @@ export default function App() {
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [compareItems, setCompareItems] = useState([]);
+
+  // Device Simulator
+  const [deviceMode, setDeviceMode] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
+  const [isLandscape, setIsLandscape] = useState(false);
+  const [deviceScale, setDeviceScale] = useState(0.85);
+
+  // Bargain Bot
+  const [bargainBotOpen, setBargainBotOpen] = useState(false);
+  const [bargainBotProduct, setBargainBotProduct] = useState(null);
+
+  // Receipt / Invoice
+  const [receiptOpen, setReceiptOpen] = useState(false);
+  const [receiptProduct, setReceiptProduct] = useState(null);
+  const [receiptAgreedPrice, setReceiptAgreedPrice] = useState(null);
+
+  // Delivery Calculator
+  const [deliveryOpen, setDeliveryOpen] = useState(false);
+  const [deliveryOrigin, setDeliveryOrigin] = useState('Toshkent');
 
   // Toast state
   const [toastMessage, setToastMessage] = useState(null);
@@ -291,9 +313,45 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       
+      {/* 📱 Device Simulator Toolbar — floating top bar */}
+      <DeviceSimulatorToolbar
+        deviceMode={deviceMode}
+        setDeviceMode={setDeviceMode}
+        isLandscape={isLandscape}
+        setIsLandscape={setIsLandscape}
+        scale={deviceScale}
+        setScale={setDeviceScale}
+      />
+
+      {/* Device Frame Wrapper — shows phone/tablet frame border around the site */}
+      {deviceMode !== 'desktop' && (
+        <div className="fixed inset-0 z-[90] pointer-events-none flex items-start justify-center pt-[72px] pb-4 px-4">
+          <div
+            style={{
+              width: deviceMode === 'mobile'
+                ? (isLandscape ? '720px' : '390px')
+                : (isLandscape ? '1024px' : '768px'),
+              height: 'calc(100vh - 100px)',
+              borderRadius: deviceMode === 'mobile' ? '44px' : '22px',
+              border: deviceMode === 'mobile' ? '8px solid #1e293b' : '7px solid #1e293b',
+              boxShadow: '0 0 0 2px #475569, 0 30px 80px rgba(0,0,0,0.9)',
+              transform: `scale(${deviceScale})`,
+              transformOrigin: 'top center',
+              pointerEvents: 'none',
+              background: 'transparent',
+              position: 'relative'
+            }}
+          >
+            {deviceMode === 'mobile' && !isLandscape && (
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-50" />
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-slate-800 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300 border border-slate-700">
+        <div className="fixed bottom-6 right-6 z-[200] bg-slate-900 dark:bg-slate-800 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300 border border-slate-700">
           <Sparkles className="w-4 h-4 text-emerald-400" />
           <span className="text-xs font-bold">{toastMessage}</span>
         </div>
@@ -332,6 +390,7 @@ export default function App() {
         onOpenSafetyGuide={() => setIsSafetyOpen(true)}
         onOpenCurrencyConverter={() => setIsCurrencyOpen(true)}
         onOpenCompare={() => setIsCompareOpen(true)}
+        onOpenDelivery={() => setDeliveryOpen(true)}
         compareCount={compareItems.length}
         locations={LOCATIONS}
       />
@@ -672,6 +731,18 @@ export default function App() {
         onToggleCompare={handleToggleCompare}
         isCompared={compareItems.some((c) => c.id === detailProductId)}
         onOpenSafetyGuide={() => setIsSafetyOpen(true)}
+        onOpenBargainBot={(p) => {
+          setBargainBotProduct(p);
+          setBargainBotOpen(true);
+        }}
+        onOpenReceipt={(p) => {
+          setReceiptProduct(p);
+          setReceiptOpen(true);
+        }}
+        onOpenDelivery={(origin) => {
+          setDeliveryOrigin(origin || 'Toshkent');
+          setDeliveryOpen(true);
+        }}
       />
 
       {/* 4. User Profile */}
@@ -736,6 +807,39 @@ export default function App() {
       <CurrencyConverterModal
         isOpen={isCurrencyOpen}
         onClose={() => setIsCurrencyOpen(false)}
+      />
+
+      {/* 11. AI Bargain Bot Modal */}
+      <BargainBotModal
+        isOpen={bargainBotOpen}
+        onClose={() => {
+          setBargainBotOpen(false);
+          setBargainBotProduct(null);
+        }}
+        product={bargainBotProduct}
+        onApplyAgreedPrice={(newPrice) => {
+          setReceiptAgreedPrice(newPrice);
+          showToast(`Kelishilgan narx saqlandi: ${newPrice.toLocaleString()} ${bargainBotProduct?.currency || ''}`);
+        }}
+      />
+
+      {/* 12. Official Receipt & Warranty Modal */}
+      <ReceiptModal
+        isOpen={receiptOpen}
+        onClose={() => {
+          setReceiptOpen(false);
+          setReceiptProduct(null);
+        }}
+        product={receiptProduct}
+        agreedPrice={receiptAgreedPrice}
+        currentUser={user}
+      />
+
+      {/* 13. Delivery Calculator Modal */}
+      <DeliveryCalcModal
+        isOpen={deliveryOpen}
+        onClose={() => setDeliveryOpen(false)}
+        productOrigin={deliveryOrigin}
       />
 
     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart, MapPin, Eye, Phone, Calendar, CheckCircle2, Star, Video, Zap, Sparkles, Scale } from 'lucide-react';
+import PriceAnalyticsBadge from './PriceAnalyticsBadge';
 
 export default function ProductCard({
   product,
@@ -129,7 +130,7 @@ export default function ProductCard({
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Price & Discounts */}
-          <div className="flex items-baseline gap-2 mb-1.5 flex-wrap">
+          <div className="flex items-baseline gap-2 mb-1 flex-wrap">
             <span className="text-xl sm:text-2xl font-black tracking-tight text-emerald-600 dark:text-emerald-400">
               {formatPrice(product.price, product.currency)}
             </span>
@@ -143,6 +144,11 @@ export default function ProductCard({
                 </span>
               </div>
             )}
+          </div>
+
+          {/* Market Price Indicator */}
+          <div className="mb-2">
+            <PriceAnalyticsBadge price={product.price} oldPrice={product.old_price} isCompact={true} />
           </div>
 
           {/* Title */}

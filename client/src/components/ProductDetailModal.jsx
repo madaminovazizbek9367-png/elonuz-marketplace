@@ -40,7 +40,10 @@ export default function ProductDetailModal({
   onSelectSimilarProduct,
   onToggleCompare,
   isCompared,
-  onOpenSafetyGuide
+  onOpenSafetyGuide,
+  onOpenBargainBot,
+  onOpenReceipt,
+  onOpenDelivery
 }) {
   const { user } = useAuth();
   const [product, setProduct] = useState(null);
@@ -637,6 +640,35 @@ export default function ProductDetailModal({
                         <span>SMS yuborish ({product.seller_phone})</span>
                       </a>
                     )}
+
+                    {/* 🤖 AI BARGAIN BOT */}
+                    {(!user || user.id !== product.seller_id) && (
+                      <button
+                        onClick={() => onOpenBargainBot?.(product)}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-purple-600/20 transition-all cursor-pointer"
+                      >
+                        <span>🤖</span>
+                        <span>AI Bot bilan savdolashish (Narx tushirish)</span>
+                      </button>
+                    )}
+
+                    {/* 🧾 RASMIY XARID CHEKI */}
+                    <button
+                      onClick={() => onOpenReceipt?.(product)}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
+                    >
+                      <span>🧾</span>
+                      <span>Rasmiy xarid cheki (Print / PDF)</span>
+                    </button>
+
+                    {/* 🚚 YETKAZIB BERISH */}
+                    <button
+                      onClick={() => onOpenDelivery?.(product.location)}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 text-blue-700 dark:text-blue-300 font-bold text-xs border border-blue-200 dark:border-blue-800 transition-all cursor-pointer"
+                    >
+                      <span>🚚</span>
+                      <span>Yetkazib berish narxini hisoblash</span>
+                    </button>
 
                     {/* Telegram & Social Share Section */}
                     <div className="pt-2 border-t border-gray-100 dark:border-slate-800 space-y-1.5">
