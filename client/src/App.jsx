@@ -157,15 +157,6 @@ export default function App() {
     showToast('Taqqoslash ro\'yxati tozalandi');
   };
 
-  // TALAB 1: Saytga kirganda agar foydalanuvchi tizimga kirmagan bo'lsa, 1-bo'lib ro'yxatdan o'tish oynasi chiqadi
-  useEffect(() => {
-    if (!authLoading && !user) {
-      setAuthMode('register');
-      setIsFirstVisitAuth(true);
-      setAuthModalOpen(true);
-    }
-  }, [authLoading, user]);
-
   // Fetch categories
   const loadCategories = async () => {
     try {

@@ -61,19 +61,49 @@ async function ghGet() {
   if (_dbCache && (now - _cacheTime) < CACHE_TTL) {
     return { db: _dbCache, sha: _dbSha };
   }
-  const res = await fetch(`${GH_API}/repos/${GH_REPO}/contents/${GH_DB_PATH}`, {
-    headers: {
-      'Authorization': `token ${GH_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json'
+
+  // 1. Try official GitHub API with auth token & cache busting
+  try {
+    const res = await fetch(`${GH_API}/repos/${GH_REPO}/contents/${GH_DB_PATH}?t=${now}`, {
+      cache: 'no-store',
+      headers: {
+        'Authorization': `token ${GH_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const content = JSON.parse(b64DecodeUnicode(json.content));
+      _dbCache = content;
+      _dbSha = json.sha;
+      _cacheTime = now;
+      return { db: content, sha: json.sha };
     }
-  });
-  if (!res.ok) throw new Error('DB o\'qishda xato');
-  const json = await res.json();
-  const content = JSON.parse(b64DecodeUnicode(json.content));
-  _dbCache = content;
-  _dbSha = json.sha;
-  _cacheTime = now;
-  return { db: content, sha: json.sha };
+  } catch (err) {
+    console.warn('GitHub API fetch failed, trying raw fallback...', err);
+  }
+
+  // 2. Fallback to raw GitHub usercontent (unauthenticated, 100% reliable read)
+  try {
+    const rawRes = await fetch(`https://raw.githubusercontent.com/${GH_REPO}/master/${GH_DB_PATH}?t=${now}`, {
+      cache: 'no-store'
+    });
+    if (rawRes.ok) {
+      const rawDb = await rawRes.json();
+      _dbCache = rawDb;
+      _cacheTime = now;
+      return { db: rawDb, sha: _dbSha || 'raw_fallback' };
+    }
+  } catch (err) {
+    console.warn('Raw GitHub fetch failed...', err);
+  }
+
+  // 3. Fallback to cached DB if available
+  if (_dbCache) {
+    return { db: _dbCache, sha: _dbSha };
+  }
+
+  throw new Error('Ma\'lumotlar bazasini yuklashda xatolik. Iltimos internetni tekshiring.');
 }
 
 async function ghPut(db, sha) {
