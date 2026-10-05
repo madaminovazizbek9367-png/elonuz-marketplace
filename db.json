@@ -11,6 +11,18 @@
       "is_verified": 1,
       "is_blocked": 0,
       "created_at": "2026-10-04T13:47:00.947Z"
+    },
+    {
+      "id": 1791210926698,
+      "username": "aziko_777",
+      "email": "nurmuhammadmadaminov23@gmail.com",
+      "phone": "+998 94 747 79 97",
+      "avatar_url": "https://api.dicebear.com/7.x/initials/svg?seed=aziko_777",
+      "telegram_username": null,
+      "role": "user",
+      "is_verified": 0,
+      "is_blocked": 0,
+      "created_at": "2026-10-05T14:35:26.698Z"
     }
   ],
   "products": [],
