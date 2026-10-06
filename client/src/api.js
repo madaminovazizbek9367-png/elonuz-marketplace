@@ -421,9 +421,16 @@ async function githubApiHandler(endpoint, options = {}) {
   const prodEditMatch = endpoint.match(/^\/products\/(\d+)$/);
   if (prodEditMatch && method === 'PUT') {
     if (!currentUser) throw new Error('Avtorizatsiya talab etiladi');
-    const prodId = parseInt(prodEditMatch[1]);
-    const idx = db.products.findIndex(x => x.id === prodId);
+    const prodId = prodEditMatch[1];
+    const idx = db.products.findIndex(x => String(x.id) === String(prodId));
     if (idx === -1) throw new Error('E\'lon topilmadi');
+
+    const isOwner = String(db.products[idx].user_id) === String(currentUser.id);
+    const isAdmin = currentUser.role === 'admin' || currentUser.username === 'admin';
+    if (!isOwner && !isAdmin) {
+      throw new Error('Siz faqat o\'zingiz qo\'ygan e\'lonni tahrirlashingiz mumkin!');
+    }
+
     db.products[idx] = {
       ...db.products[idx], ...body,
       category_id: parseInt(body.category_id) || db.products[idx].category_id,
@@ -436,11 +443,21 @@ async function githubApiHandler(endpoint, options = {}) {
   }
 
   if (prodEditMatch && method === 'DELETE') {
-    if (!currentUser) throw new Error('Avtorizatsiya talab etiladi');
-    const prodId = parseInt(prodEditMatch[1]);
-    db.products = db.products.filter(x => x.id !== prodId);
+    if (!currentUser) throw new Error('E\'lonni o\'chirish uchun avval tizimga kiring');
+    const prodId = prodEditMatch[1];
+    const product = db.products.find(x => String(x.id) === String(prodId));
+    if (!product) throw new Error('E\'lon topilmadi');
+
+    const isOwner = String(product.user_id) === String(currentUser.id);
+    const isAdmin = currentUser.role === 'admin' || currentUser.username === 'admin';
+    if (!isOwner && !isAdmin) {
+      throw new Error('Siz faqat o\'zingiz qo\'ygan e\'lonni o\'chira olasiz! Boshqa e\'lonlarni faqat Administrator o\'chira oladi.');
+    }
+
+    db.products = db.products.filter(x => String(x.id) !== String(prodId));
+    if (db.favorites) db.favorites = db.favorites.filter(f => String(f.product_id) !== String(prodId));
     await ghPut(db, sha);
-    return { message: 'E\'lon o\'chirildi' };
+    return { message: 'E\'lon muvaffaqiyatli o\'chirildi' };
   }
 
   // ── Favorites ─────────────────────────────────────────────────────────────

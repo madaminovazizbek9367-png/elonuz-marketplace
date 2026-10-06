@@ -145,7 +145,14 @@ export default function ProductDetailModal({
     ? product.images.map(img => img.image_url)
     : [product?.primary_image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&auto=format&fit=crop&q=80'];
 
-  const isOwner = user && product && (user.id === product.user_id || user.role === 'admin');
+  const isOwner = Boolean(
+    user && product && (
+      String(user.id) === String(product.user_id) || 
+      String(user.id) === String(product.seller_id) || 
+      user.role === 'admin' || 
+      user.username === 'admin'
+    )
+  );
 
   const handleShare = () => {
     if (navigator.clipboard) {
@@ -816,22 +823,24 @@ export default function ProductDetailModal({
                     </button>
                   </div>
 
-                  {/* Edit/Delete if Owner or Admin */}
+                  {/* Edit/Delete only if Owner or Admin */}
                   {isOwner && (
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onEditProduct(product)}
-                        className="p-2 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-slate-800 rounded-2xl border border-indigo-200 dark:border-indigo-800 transition-colors cursor-pointer"
+                        className="px-3 py-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-xl border border-indigo-200 dark:border-indigo-800 transition-colors cursor-pointer flex items-center gap-1.5"
                         title="E'lonni tahrirlash"
                       >
-                        <Edit3 className="w-4 h-4" />
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Tahrirlash</span>
                       </button>
                       <button
                         onClick={() => onDeleteProduct(product.id)}
-                        className="p-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-slate-800 rounded-2xl border border-rose-200 dark:border-rose-800 transition-colors cursor-pointer"
-                        title="E'lonni o'chirish"
+                        className="px-3 py-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 rounded-xl border border-rose-200 dark:border-rose-800 transition-colors cursor-pointer flex items-center gap-1.5"
+                        title={user?.role === 'admin' ? "E'lonni o'chirish (Admin)" : "O'z e'lonimni o'chirish"}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>O'chirish {user?.role === 'admin' && String(user.id) !== String(product.user_id) ? '(Admin)' : ''}</span>
                       </button>
                     </div>
                   )}
