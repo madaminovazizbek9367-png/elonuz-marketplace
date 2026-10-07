@@ -656,6 +656,75 @@ Qo'shimcha savollar uchun yozing yoki qo'ng'iroq qiling. Shoshiling!`;
     return { message: 'E\'lon o\'chirildi' };
   }
 
+  // ── Seller Statistics ──────────────────────────────────────────────────
+  const sellerStatsMatch = endpoint.match(/^\/seller\/(\d+)\/stats$/);
+  if (sellerStatsMatch && method === 'GET') {
+    const sellerId = parseInt(sellerStatsMatch[1]);
+    const sellerProducts = db.products.filter(p => p.user_id === sellerId);
+    const sellerReviews = (db.reviews || []).filter(r => r.seller_id === sellerId);
+    const sellerMessages = (db.messages || []).filter(m => m.receiver_id === sellerId || m.sender_id === sellerId);
+    const sellerFavorites = (db.favorites || []).filter(f => 
+      sellerProducts.some(p => p.id === f.product_id)
+    );
+    
+    const totalViews = sellerProducts.reduce((sum, p) => sum + (p.views || 0), 0);
+    const avgRating = sellerReviews.length > 0 
+      ? (sellerReviews.reduce((s, r) => s + r.rating, 0) / sellerReviews.length).toFixed(1)
+      : 0;
+
+    // Views per product (top 10)
+    const viewsPerProduct = sellerProducts
+      .sort((a, b) => (b.views || 0) - (a.views || 0))
+      .slice(0, 10)
+      .map(p => ({ id: p.id, title: p.title, views: p.views || 0, price: p.price, currency: p.currency }));
+
+    // Products by category
+    const categoryStats = {};
+    sellerProducts.forEach(p => {
+      const cat = SEED_CATEGORIES.find(c => c.id === p.category_id);
+      const catName = cat ? cat.name : 'Boshqa';
+      categoryStats[catName] = (categoryStats[catName] || 0) + 1;
+    });
+
+    // Rating distribution
+    const ratingDist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    sellerReviews.forEach(r => { ratingDist[r.rating] = (ratingDist[r.rating] || 0) + 1; });
+
+    // Favorites per product
+    const favsPerProduct = sellerProducts.map(p => ({
+      id: p.id,
+      title: p.title,
+      favs: (db.favorites || []).filter(f => f.product_id === p.id).length
+    }));
+
+    return {
+      totalProducts: sellerProducts.length,
+      totalViews,
+      totalFavorites: sellerFavorites.length,
+      totalMessages: sellerMessages.length,
+      totalReviews: sellerReviews.length,
+      averageRating: parseFloat(avgRating) || 0,
+      viewsPerProduct,
+      categoryStats,
+      ratingDistribution: ratingDist,
+      favsPerProduct,
+      recentReviews: sellerReviews.slice(0, 5).map(r => {
+        const reviewer = db.users.find(u => u.id === r.reviewer_id) || {};
+        return { ...r, reviewer_name: reviewer.username || 'Xaridor' };
+      }),
+      products: sellerProducts.map(p => ({
+        id: p.id,
+        title: p.title,
+        price: p.price,
+        currency: p.currency,
+        views: p.views || 0,
+        primary_image: p.primary_image,
+        created_at: p.created_at,
+        favs: (db.favorites || []).filter(f => f.product_id === p.id).length
+      }))
+    };
+  }
+
   return {};
 }
 
@@ -749,6 +818,9 @@ export const api = {
   // Reviews & Rating
   getSellerReviews: (sellerId) => apiRequest(`/reviews/seller/${sellerId}`),
   submitReview: (body) => apiRequest('/reviews', { method: 'POST', body }),
+
+  // Seller Statistics
+  getSellerStats: (sellerId) => apiRequest(`/seller/${sellerId}/stats`),
 
   // AI Description Generator
   generateAiDescription: (body) => apiRequest('/products/ai-describe', { method: 'POST', body }),

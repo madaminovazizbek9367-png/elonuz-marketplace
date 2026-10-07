@@ -21,6 +21,8 @@ import DeviceSimulatorToolbar from './components/DeviceSimulatorToolbar';
 import BargainBotModal from './components/BargainBotModal';
 import ReceiptModal from './components/ReceiptModal';
 import DeliveryCalcModal from './components/DeliveryCalcModal';
+import SellerStatsModal from './components/SellerStatsModal';
+import TelegramBotModal from './components/TelegramBotModal';
 
 import { 
   SlidersHorizontal, 
@@ -35,7 +37,9 @@ import {
   MapPin,
   Star,
   Zap,
-  Video
+  Video,
+  BarChart3,
+  Bot
 } from 'lucide-react';
 
 const LOCATIONS = [
@@ -122,6 +126,12 @@ export default function App() {
   // Delivery Calculator
   const [deliveryOpen, setDeliveryOpen] = useState(false);
   const [deliveryOrigin, setDeliveryOrigin] = useState('Toshkent');
+
+  // Seller Statistics
+  const [sellerStatsOpen, setSellerStatsOpen] = useState(false);
+
+  // Telegram Bot
+  const [telegramBotOpen, setTelegramBotOpen] = useState(false);
 
   // Toast state
   const [toastMessage, setToastMessage] = useState(null);
@@ -429,6 +439,8 @@ export default function App() {
         onOpenCurrencyConverter={() => setIsCurrencyOpen(true)}
         onOpenCompare={() => setIsCompareOpen(true)}
         onOpenDelivery={() => setDeliveryOpen(true)}
+        onOpenSellerStats={() => setSellerStatsOpen(true)}
+        onOpenTelegramBot={() => setTelegramBotOpen(true)}
         compareCount={compareItems.length}
         locations={LOCATIONS}
       />
@@ -512,6 +524,27 @@ export default function App() {
                 >
                   <MapPin className="w-3.5 h-3.5" />
                   🗺️ Xarita
+                </button>
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      setAuthMode('login');
+                      setAuthModalOpen(true);
+                    } else {
+                      setSellerStatsOpen(true);
+                    }
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 transition-colors cursor-pointer"
+                >
+                  <BarChart3 className="w-3.5 h-3.5 text-teal-600" />
+                  📊 Statistika
+                </button>
+                <button
+                  onClick={() => setTelegramBotOpen(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-100 transition-colors cursor-pointer"
+                >
+                  <Bot className="w-3.5 h-3.5 text-sky-500" />
+                  🤖 Telegram Bot
                 </button>
                 <button
                   onClick={() => setFilterVip(!filterVip)}
@@ -878,6 +911,18 @@ export default function App() {
         isOpen={deliveryOpen}
         onClose={() => setDeliveryOpen(false)}
         productOrigin={deliveryOrigin}
+      />
+
+      {/* 14. Seller Performance Statistics Modal */}
+      <SellerStatsModal
+        isOpen={sellerStatsOpen}
+        onClose={() => setSellerStatsOpen(false)}
+      />
+
+      {/* 15. Telegram Bot Official Modal */}
+      <TelegramBotModal
+        isOpen={telegramBotOpen}
+        onClose={() => setTelegramBotOpen(false)}
       />
 
     </div>

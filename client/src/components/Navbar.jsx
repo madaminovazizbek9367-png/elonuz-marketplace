@@ -23,7 +23,9 @@ import {
   Calculator,
   Mic,
   Globe,
-  Truck
+  Truck,
+  Bot,
+  BarChart3
 } from 'lucide-react';
 
 export default function Navbar({
@@ -42,6 +44,8 @@ export default function Navbar({
   onOpenCurrencyConverter,
   onOpenCompare,
   onOpenDelivery,
+  onOpenSellerStats,
+  onOpenTelegramBot,
   compareCount = 0,
   locations = []
 }) {
@@ -233,6 +237,16 @@ export default function Navbar({
               )}
             </button>
 
+            {/* Telegram Bot Modal Trigger */}
+            <button
+              onClick={onOpenTelegramBot}
+              title="E'lonUZ Rasmiy Telegram Boti (@ElonUz_Bozor_Bot)"
+              className="flex items-center gap-1.5 p-2 px-3 text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-2xl transition-all cursor-pointer border border-sky-200 dark:border-sky-800 text-xs font-bold whitespace-nowrap shrink-0 shadow-2xs"
+            >
+              <Bot className="w-4 h-4 text-sky-500 shrink-0" />
+              <span className="hidden sm:inline whitespace-nowrap">🤖 Bot</span>
+            </button>
+
             {/* Telegram Lichka: @Mdmnv_77 */}
             <a
               href="https://t.me/Mdmnv_77"
@@ -342,6 +356,17 @@ export default function Navbar({
                     >
                       <ShoppingBag className="w-4 h-4 text-gray-400" />
                       Mening e'lonlarim
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setUserDropdownOpen(false);
+                        onOpenSellerStats();
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-xs text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-800 flex items-center gap-2.5 font-bold transition-colors cursor-pointer"
+                    >
+                      <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      📊 Sotuvchi Statistikasi
                     </button>
 
                     {user.role === 'admin' && (

@@ -1,216 +1,263 @@
-import React, { useState } from 'react';
-import { X, MapPin, Navigation, Eye, Heart, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, MapPin, Search } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-const REGIONS_DATA = [
-  { name: 'Toshkent', x: 78, y: 32, count: 0 },
-  { name: 'Samarqand', x: 58, y: 55, count: 0 },
-  { name: 'Buxoro', x: 45, y: 52, count: 0 },
-  { name: 'Andijon', x: 92, y: 40, count: 0 },
-  { name: 'Farg\'ona', x: 88, y: 48, count: 0 },
-  { name: 'Namangan', x: 85, y: 35, count: 0 },
-  { name: 'Qarshi', x: 55, y: 68, count: 0 },
-  { name: 'Termiz', x: 62, y: 85, count: 0 },
-  { name: 'Navoiy', x: 48, y: 42, count: 0 },
-  { name: 'Jizzax', x: 68, y: 44, count: 0 },
-  { name: 'Urganch', x: 26, y: 38, count: 0 },
-  { name: 'Nukus', x: 18, y: 25, count: 0 }
-];
+// Fix for default Leaflet markers in React
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-export default function MapModal({
-  isOpen,
-  onClose,
-  products = [],
-  onSelectProduct
-}) {
-  const [selectedRegion, setSelectedRegion] = useState('Barchasi');
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
+const CITY_COORDINATES = {
+  "Toshkent": [41.2995, 69.2401],
+  "Samarqand": [39.6542, 66.9597],
+  "Buxoro": [39.7745, 64.4286],
+  "Andijon": [40.7821, 72.3442],
+  "Farg'ona": [40.3842, 71.7891],
+  "Namangan": [41.0011, 71.6722],
+  "Qarshi": [38.8612, 65.7986],
+  "Termiz": [37.2241, 67.2783],
+  "Navoiy": [40.1033, 65.3792],
+  "Jizzax": [40.1158, 67.8422],
+  "Urganch": [41.5534, 60.6317],
+  "Nukus": [42.4628, 59.6031]
+};
+
+// Create custom icons
+const createCustomIcon = (color) => {
+  return new L.Icon({
+    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+};
+
+const normalIcon = createCustomIcon('green'); // Using green for emerald
+const vipIcon = createCustomIcon('gold');
+
+// Component to handle map view updates when region changes
+const MapUpdater = ({ center, zoom }) => {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
+  return null;
+};
+
+export default function MapModal({ isOpen, onClose, products = [], onSelectProduct }) {
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  
   if (!isOpen) return null;
 
-  // Calculate count per region
-  const regionCounts = {};
-  products.forEach(p => {
-    if (p.location) {
-      regionCounts[p.location] = (regionCounts[p.location] || 0) + 1;
+  // Find unique regions from products that have coordinates
+  const availableRegions = [...new Set(products
+    .map(p => p.location)
+    .filter(loc => CITY_COORDINATES[loc]))
+  ];
+
+  const filteredProducts = selectedRegion 
+    ? products.filter(p => p.location === selectedRegion)
+    : products.filter(p => CITY_COORDINATES[p.location]);
+
+  const defaultCenter = [41.3, 64.5];
+  const defaultZoom = 6;
+  
+  const mapCenter = selectedRegion && CITY_COORDINATES[selectedRegion]
+    ? CITY_COORDINATES[selectedRegion]
+    : defaultCenter;
+    
+  const mapZoom = selectedRegion ? 10 : defaultZoom;
+
+  const handleProductClick = (product) => {
+    if (onSelectProduct) {
+      onSelectProduct(product);
+      onClose();
     }
-  });
-
-  const filteredProducts = selectedRegion === 'Barchasi'
-    ? products
-    : products.filter(p => p.location && p.location.toLowerCase().includes(selectedRegion.toLowerCase()));
-
-  const formatPrice = (price, currency) => {
-    const formatted = new Intl.NumberFormat('uz-UZ').format(price);
-    return currency === 'USD' ? `$${formatted}` : `${formatted} so'm`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
-      <div 
-        className="bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 rounded-3xl w-full max-w-5xl h-[88vh] max-h-[750px] overflow-hidden shadow-2xl flex flex-col relative border border-transparent dark:border-slate-800 transition-colors"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between z-10 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-black text-gray-900 dark:text-white">
-                O'zbekiston E'lonlar Xaritasi
-              </h2>
-              <p className="text-xs text-gray-400">
-                Hududlar bo'yicha e'lonlarni toping va qulay xarid qiling
-              </p>
-            </div>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-6xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row relative">
+        
+        {/* Close Button */}
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 z-[1000] p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
 
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
+        {/* Map Area */}
+        <div className="flex-1 h-full relative z-0">
+          <MapContainer 
+            center={defaultCenter} 
+            zoom={defaultZoom} 
+            className="w-full h-full"
+            style={{ backgroundColor: '#e5e7eb' }}
           >
-            <X className="w-5 h-5" />
-          </button>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              className="map-tiles" // Add class to allow CSS dark mode filtering if desired
+            />
+            
+            <MapUpdater center={mapCenter} zoom={mapZoom} />
+
+            {filteredProducts.map(product => {
+              const coords = CITY_COORDINATES[product.location];
+              if (!coords) return null;
+              
+              // Add slight random offset for multiple products in same city
+              const latOffset = (Math.random() - 0.5) * 0.05;
+              const lngOffset = (Math.random() - 0.5) * 0.05;
+              
+              return (
+                <Marker 
+                  key={product.id} 
+                  position={[coords[0] + latOffset, coords[1] + lngOffset]}
+                  icon={product.is_vip ? vipIcon : normalIcon}
+                >
+                  <Popup className="product-popup">
+                    <div 
+                      className="w-48 cursor-pointer"
+                      onClick={() => handleProductClick(product)}
+                    >
+                      <img 
+                        src={product.primary_image || 'https://via.placeholder.com/150'} 
+                        alt={product.title}
+                        className="w-full h-32 object-cover rounded-t-lg"
+                      />
+                      <div className="p-2 bg-white dark:bg-gray-800 rounded-b-lg shadow-sm">
+                        <h3 className="font-semibold text-sm line-clamp-2 text-gray-900 dark:text-white">
+                          {product.title}
+                        </h3>
+                        <p className="text-emerald-600 dark:text-emerald-400 font-bold mt-1">
+                          {product.price?.toLocaleString()} {product.currency || 'UZS'}
+                        </p>
+                        <p className="text-xs text-gray-500 flex items-center mt-1">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {product.location}
+                        </p>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+          </MapContainer>
         </div>
 
-        {/* Content: Map on Top, Listings Grid on Bottom */}
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-          
-          {/* Interactive Map Canvas Container (Left / Top) */}
-          <div className="md:w-7/12 p-4 flex flex-col bg-slate-50 dark:bg-slate-950/60 border-b md:border-b-0 md:border-r border-gray-100 dark:border-slate-800 relative select-none">
+        {/* Sidebar */}
+        <div className="w-full md:w-80 h-full bg-gray-50 dark:bg-gray-800/50 border-l border-gray-200 dark:border-gray-700 flex flex-col z-10">
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-emerald-600" />
+              Xaritadan qidirish
+            </h2>
             
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-gray-500 dark:text-slate-400">
-                📍 Hududni tanlang:
-              </span>
+            <div className="mt-4 flex flex-wrap gap-2">
               <button
-                onClick={() => setSelectedRegion('Barchasi')}
-                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  selectedRegion === 'Barchasi'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300'
+                onClick={() => setSelectedRegion(null)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                  selectedRegion === null 
+                    ? 'bg-emerald-600 text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
-                Barcha hududlar ({products.length})
+                Barchasi
               </button>
-            </div>
-
-            {/* Stylized Visual Map */}
-            <div className="flex-1 relative rounded-3xl bg-emerald-950/5 dark:bg-emerald-950/20 border border-emerald-500/20 overflow-hidden flex items-center justify-center p-4">
-              
-              {/* Decorative grid pattern */}
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px]" />
-
-              {/* Pins for regions */}
-              <div className="w-full h-full relative">
-                {REGIONS_DATA.map((reg) => {
-                  const count = regionCounts[reg.name] || 0;
-                  const isSelected = selectedRegion === reg.name;
-
-                  return (
-                    <button
-                      key={reg.name}
-                      onClick={() => setSelectedRegion(reg.name)}
-                      style={{ left: `${reg.x}%`, top: `${reg.y}%` }}
-                      className={`absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer transition-all duration-300 z-10 ${
-                        isSelected ? 'scale-125 z-20' : 'hover:scale-115'
-                      }`}
-                    >
-                      <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-2xl shadow-lg border transition-all ${
-                        isSelected
-                          ? 'bg-emerald-600 text-white border-emerald-400 ring-4 ring-emerald-500/20'
-                          : count > 0
-                          ? 'bg-white dark:bg-slate-900 text-gray-900 dark:text-white border-emerald-500/50 hover:border-emerald-500'
-                          : 'bg-white/80 dark:bg-slate-900/80 text-gray-400 dark:text-slate-500 border-gray-200 dark:border-slate-800'
-                      }`}>
-                        <MapPin className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : count > 0 ? 'text-emerald-600' : 'text-gray-400'}`} />
-                        <span className="text-[11px] font-bold">{reg.name}</span>
-                        {count > 0 && (
-                          <span className={`text-[10px] font-black px-1.5 py-0.2 rounded-full ${
-                            isSelected ? 'bg-white text-emerald-700' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                          }`}>
-                            {count}
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Info corner badge */}
-              <div className="absolute bottom-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-gray-200 dark:border-slate-800 text-[11px] font-semibold text-gray-600 dark:text-slate-400">
-                🇺🇿 Tanlangan: <strong className="text-emerald-600 dark:text-emerald-400">{selectedRegion}</strong> ({filteredProducts.length} ta e'lon)
-              </div>
+              {availableRegions.map(region => (
+                <button
+                  key={region}
+                  onClick={() => setSelectedRegion(region)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    selectedRegion === region 
+                      ? 'bg-emerald-600 text-white' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {region}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Listings List (Right / Bottom) */}
-          <div className="md:w-5/12 flex flex-col bg-white dark:bg-slate-900 overflow-hidden">
-            <div className="p-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between">
-              <h3 className="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
-                E'lonlar ro'yxati ({filteredProducts.length})
-              </h3>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {filteredProducts.length === 0 ? (
-                <div className="text-center py-16 space-y-2 text-gray-400">
-                  <MapPin className="w-10 h-10 mx-auto text-gray-300 dark:text-slate-700" />
-                  <p className="text-xs font-semibold text-gray-600 dark:text-slate-300">Bu hududda hozircha e'lonlar yo'q</p>
-                  <p className="text-[11px] text-gray-400">Boshqa hududni tanlang yoki e'lon joylang</p>
-                </div>
-              ) : (
-                filteredProducts.map((p) => (
-                  <div
-                    key={p.id}
-                    onClick={() => {
-                      onClose();
-                      onSelectProduct(p);
-                    }}
-                    className="p-3 rounded-2xl bg-gray-50 dark:bg-slate-800/60 border border-gray-200/80 dark:border-slate-700/80 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all cursor-pointer flex gap-3 group"
-                  >
-                    <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-200 dark:bg-slate-700 shrink-0">
-                      <img
-                        src={p.primary_image || 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&auto=format&fit=crop&q=80'}
-                        alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">
-                            {formatPrice(p.price, p.currency)}
-                          </span>
-                          {p.is_vip ? (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-400 text-slate-950">
-                              VIP
-                            </span>
-                          ) : null}
-                        </div>
-                        <h4 className="text-xs font-bold text-gray-900 dark:text-white truncate group-hover:text-emerald-600 transition-colors">
-                          {p.title}
-                        </h4>
-                      </div>
-                      <div className="flex items-center justify-between text-[11px] text-gray-400">
-                        <span className="flex items-center gap-1 truncate">
-                          <MapPin className="w-3 h-3 text-gray-400" />
-                          {p.location}
-                        </span>
-                        <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400 font-bold group-hover:translate-x-0.5 transition-transform">
-                          Ko'rish <ArrowRight className="w-3 h-3" />
-                        </span>
-                      </div>
-                    </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+              {filteredProducts.length} ta e'lon topildi
+            </h3>
+            
+            {filteredProducts.map(product => (
+              <div 
+                key={product.id}
+                onClick={() => handleProductClick(product)}
+                className="bg-white dark:bg-gray-900 rounded-xl p-3 flex gap-3 cursor-pointer hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
+              >
+                <img 
+                  src={product.primary_image || 'https://via.placeholder.com/150'} 
+                  alt={product.title}
+                  className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0 flex flex-col justify-between">
+                  <h4 className="font-medium text-sm text-gray-900 dark:text-white line-clamp-2">
+                    {product.title}
+                  </h4>
+                  <div>
+                    <p className="text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+                      {product.price?.toLocaleString()} {product.currency || 'UZS'}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1 flex items-center">
+                      <MapPin className="w-3 h-3 mr-1" />
+                      {product.location}
+                    </p>
                   </div>
-                ))
-              )}
-            </div>
-          </div>
+                </div>
+              </div>
+            ))}
 
+            {filteredProducts.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                <Search className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                <p>Bu hududda e'lonlar yo'q</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .leaflet-container {
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+        /* Dark mode map tiles */
+        .dark .map-tiles {
+          filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+        }
+        /* Fix popup styles in dark mode */
+        .dark .leaflet-popup-content-wrapper {
+          background-color: #1f2937;
+          color: #f3f4f6;
+        }
+        .dark .leaflet-popup-tip {
+          background-color: #1f2937;
+        }
+        .leaflet-popup-content {
+          margin: 0 !important;
+        }
+      `}</style>
     </div>
   );
 }
