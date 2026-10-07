@@ -33,11 +33,24 @@ export default function TelegramBotModal({ isOpen, onClose }) {
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [tgConnected, setTgConnected] = useState(Boolean(user?.telegram_username));
 
+  const [savedBotUsername, setSavedBotUsername] = useState(() => localStorage.getItem('elonuz_tg_bot_username') || 'ElonUz_Bozor_Bot');
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [tempUsername, setTempUsername] = useState(savedBotUsername);
+
   if (!isOpen) return null;
 
-  const botUsername = "ElonUz_Bozor_Bot";
-  const channelUsername = "ElonUz_Rasmiy";
+  const botUsername = savedBotUsername.replace('@', '');
   const connectCode = user ? `ELON-${user.id.toString().slice(-4)}` : "ELON-7788";
+
+  const handleSaveBotUsername = (e) => {
+    e.preventDefault();
+    const clean = tempUsername.trim().replace('@', '');
+    if (clean) {
+      setSavedBotUsername(clean);
+      localStorage.setItem('elonuz_tg_bot_username', clean);
+      setEditingUsername(false);
+    }
+  };
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(`/connect ${connectCode}`);
@@ -181,21 +194,47 @@ export default function TelegramBotModal({ isOpen, onClose }) {
                     <Send className="w-6 h-6 ml-0.5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black text-gray-900 dark:text-white">
-                      Rasmiy Telegram Bot: @{botUsername}
-                    </h3>
-                    <p className="text-xs text-gray-500 dark:text-slate-400">
-                      Holat: {tgConnected ? (
-                        <span className="text-emerald-600 font-bold">🟢 Ulangan ({user?.telegram_username || '@Mdmnv_77'})</span>
-                      ) : (
-                        <span className="text-amber-500 font-bold">🟡 Ulanmagan</span>
-                      )}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-black text-gray-900 dark:text-white">
+                        Telegram Bot: @{botUsername}
+                      </h3>
+                      <button
+                        onClick={() => setEditingUsername(!editingUsername)}
+                        className="text-[11px] text-sky-500 hover:underline font-semibold cursor-pointer"
+                      >
+                        {editingUsername ? "Bekor qilish" : "O'zgartirish"}
+                      </button>
+                    </div>
+                    {editingUsername ? (
+                      <form onSubmit={handleSaveBotUsername} className="flex gap-2 mt-1.5">
+                        <input
+                          type="text"
+                          value={tempUsername}
+                          onChange={(e) => setTempUsername(e.target.value)}
+                          placeholder="bot_username"
+                          className="px-2.5 py-1 text-xs bg-white dark:bg-slate-800 rounded-xl border border-sky-400 focus:outline-none"
+                        />
+                        <button
+                          type="submit"
+                          className="px-2.5 py-1 text-xs bg-sky-500 text-white font-bold rounded-xl"
+                        >
+                          Saqlash
+                        </button>
+                      </form>
+                    ) : (
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
+                        Holat: {tgConnected ? (
+                          <span className="text-emerald-600 font-bold">🟢 Ulangan ({user?.telegram_username || '@Mdmnv_77'})</span>
+                        ) : (
+                          <span className="text-amber-500 font-bold">🟡 Ulanmagan</span>
+                        )}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <a
-                  href={`https://t.me/Mdmnv_77`}
+                  href={`https://t.me/${botUsername}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-black text-xs shadow-md shadow-sky-500/25 transition-all flex items-center gap-2 cursor-pointer shrink-0"
