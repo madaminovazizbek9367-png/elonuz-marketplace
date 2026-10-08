@@ -6,5 +6,6 @@ server/marketplace.db
 server/uploads/
 .env
 client/.env
+server/.env
 .DS_Store
 *.log

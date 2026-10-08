@@ -33,7 +33,7 @@ export default function TelegramBotModal({ isOpen, onClose }) {
   const [isBotTyping, setIsBotTyping] = useState(false);
   const [tgConnected, setTgConnected] = useState(Boolean(user?.telegram_username));
 
-  const [savedBotUsername, setSavedBotUsername] = useState(() => localStorage.getItem('elonuz_tg_bot_username') || 'ElonUz_Bozor_Bot');
+  const [savedBotUsername, setSavedBotUsername] = useState(() => localStorage.getItem('elonuz_tg_bot_username') || 'Elon_Uz_009_bot');
   const [editingUsername, setEditingUsername] = useState(false);
   const [tempUsername, setTempUsername] = useState(savedBotUsername);
 
