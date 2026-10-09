@@ -14,11 +14,11 @@ export default function Footer({ onSelectCategory, categories = [] }) {
                 <ShoppingBag className="w-5 h-5" />
               </div>
               <span className="text-xl font-black text-white tracking-tight">
-                Bozor<span className="text-emerald-400">UZ</span>
+                E'lon<span className="text-emerald-400">UZ</span>
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              O'zbekistondagi eng qulay va zamonaviy e'lonlar doskasi. Uy-joy, avtomobil, elektronika va boshqa turdagi mahsulotlarni tez va xavfsiz sotib oling yoki soting.
+              O'zbekistondagi eng qulay va zamonaviy e'lonlar platformasi. Uy-joy, avtomobil, elektronika va boshqa turdagi mahsulotlarni tez va xavfsiz sotib oling yoki soting.
             </p>
             <div className="flex items-center gap-3 text-xs text-slate-400">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -45,12 +45,13 @@ export default function Footer({ onSelectCategory, categories = [] }) {
 
           {/* Useful links */}
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Foydali bo'limlar</h4>
-            <ul className="space-y-2 text-xs">
-              <li><a href="#" className="hover:text-emerald-400 transition-colors">Qanday qilib e'lon berish mumkin?</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-colors">5 ta rasm qoidasi</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-colors">Savdolashish va Narx taklifi</a></li>
-              <li><a href="#" className="hover:text-emerald-400 transition-colors">Maxfiylik siyosati</a></li>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Platforma Imkoniyatlari</h4>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li>🤖 Telegram Bot: <strong className="text-sky-400 font-bold">@Elon_Uz_009_bot</strong></li>
+              <li>🗺️ O'zbekiston E'lonlar Xaritasi</li>
+              <li>📊 Sotuvchi Statistikasi & Analytics</li>
+              <li>💬 Jonli Chat & Ovozli Xabarlar</li>
+              <li>🚚 Viloyatlararo Yetkazib berish Kalkulyatori</li>
             </ul>
           </div>
 
@@ -60,7 +61,7 @@ export default function Footer({ onSelectCategory, categories = [] }) {
             <div className="space-y-3 text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <PhoneCall className="w-4 h-4 text-emerald-400" />
-                <span>+998 (71) 200-00-00</span>
+                <span>+998 (90) 123-45-67</span>
               </div>
               <a 
                 href="https://t.me/Mdmnv_77" 
@@ -80,7 +81,7 @@ export default function Footer({ onSelectCategory, categories = [] }) {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 BozorUZ Marketplace. Barcha huquqlar himoyalangan.</p>
+          <p>© 2026 E'lonUZ Marketplace. Barcha huquqlar himoyalangan.</p>
           <p className="flex items-center gap-1">
             <span>Yaratildi</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-current inline" />
