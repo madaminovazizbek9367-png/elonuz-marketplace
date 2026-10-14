@@ -165,6 +165,16 @@
   ],
   "reviews": [
     {
+      "id": 1791980135869,
+      "seller_id": 1791210926698,
+      "reviewer_id": 1791205366862,
+      "reviewer_username": "Aziko_6769",
+      "reviewer_avatar": "https://api.dicebear.com/7.x/initials/svg?seed=Aziko_6769",
+      "rating": 1,
+      "comment": "Yurmadi maslahat bermayman omela",
+      "created_at": "2026-10-14T12:15:35.869Z"
+    },
+    {
       "id": 1,
       "seller_id": 1,
       "reviewer_id": 2,
