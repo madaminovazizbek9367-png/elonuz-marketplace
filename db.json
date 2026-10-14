@@ -233,6 +233,18 @@
       "audio_url": null,
       "is_read": 0,
       "created_at": "2026-10-14T12:20:23.569Z"
+    },
+    {
+      "id": 1791980436512,
+      "sender_id": 1791205366862,
+      "receiver_id": 1791210926698,
+      "product_id": null,
+      "content": "Oqimasanmi molpam",
+      "message": "Oqimasanmi molpam",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-14T12:20:36.512Z"
     }
   ],
   "reviews": [
