@@ -63,6 +63,40 @@
   ],
   "products": [
     {
+      "id": 1791987258267,
+      "user_id": 1791205366862,
+      "title": "ROG Astral RTX 5090",
+      "category_id": 4,
+      "price": 4830,
+      "old_price": null,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Qarshi",
+      "description": "🌟 Sotiladi: ROG Astral RTX 5090!\n\n✅ Holati: Yangi, qutisida va kafolatga ega.\n📍 Joylashuv: Qarshi.\n💰 Narxi: 4830 USD (real xaridorga ozgina kami bor).\n\nXususiyatlari:\n• 100% original va sifatli\n• Barcha sinov va tekshiruvlardan o'tgan\n• Hech qanday nuqsoni yo'q\n\nQo'shimcha savollar uchun yozing yoki qo'ng'iroq qiling. Shoshiling!",
+      "primary_image": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fwww.techpowerup.com%2Freview%2Fasus-geforce-rtx-5090-astral%2Fimages%2Ftitle.jpg&sp=1791986966T963c193f4c61981406aea357146feabb0552e49b157feafb525541e93456b313",
+      "images": [
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fwww.techpowerup.com%2Freview%2Fasus-geforce-rtx-5090-astral%2Fimages%2Ftitle.jpg&sp=1791986966T963c193f4c61981406aea357146feabb0552e49b157feafb525541e93456b313",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.AvImKnHceQNUjgieb12W9AHaEO%3Fr%3D0%26pid%3DApi&sp=1791986966T2689cb13cb825712bf976aba2e432d1e6bb400fc8e396a029f30dd0922c1791b",
+          "is_primary": 0
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.krLBW3Q2cB3HR9If6e7EbAHaEK%3Fr%3D0%26pid%3DApi&sp=1791986966T701c0be185eb655fda24efb250362e41ddbbf8a375712fff048fecd2d470f0dc",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 0,
+      "is_urgent": 0,
+      "video_url": "https://youtu.be/BQco-ETHtTs?si=iZXvRFZMqmjF1oKw",
+      "extra_details": "{}",
+      "views": 0,
+      "created_at": "2026-10-14T14:14:18.267Z"
+    },
+    {
       "id": 1791294422712,
       "user_id": 1791205366862,
       "title": "iPhone 20",
