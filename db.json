@@ -197,6 +197,18 @@
       "audio_url": null,
       "is_read": 0,
       "created_at": "2026-10-14T12:19:12.259Z"
+    },
+    {
+      "id": 1791980356707,
+      "sender_id": 1791205366862,
+      "receiver_id": 1791210926698,
+      "product_id": 1791211166786,
+      "content": "Nima qivassan uka",
+      "message": "Nima qivassan uka",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-14T12:19:16.707Z"
     }
   ],
   "reviews": [
