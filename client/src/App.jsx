@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
 import { useTheme } from './context/ThemeContext';
+import { useLanguage } from './context/LanguageContext';
 import { api } from './api';
 
 import Navbar from './components/Navbar';
@@ -60,6 +61,7 @@ const LOCATIONS = [
 export default function App() {
   const { user, loading: authLoading, refreshCounts } = useAuth();
   const { isDark } = useTheme();
+  const { lang, t } = useLanguage();
 
   // Categories & Products state
   const [categories, setCategories] = useState([]);
@@ -461,13 +463,13 @@ export default function App() {
             <div className="relative z-10 max-w-2xl space-y-3">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/15 backdrop-blur-md text-emerald-200">
                 <Sparkles className="w-3.5 h-3.5" />
-                O'zbekistondagi eng erkin va qulay e'lonlar platformasi
+                {t('heroBadge')}
               </span>
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
-                Xohlagan narsangizni soting va xarid qiling!
+                {t('heroTitle')}
               </h1>
               <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-                Telefon, mashina, kvartira, kompyuter yoki kiyim-kechak. Kamida 3 ta sifatli rasm joylang va sotuvni boshlang.
+                {t('heroDesc')}
               </p>
               
               <div className="pt-2 flex flex-wrap gap-3">
@@ -485,7 +487,7 @@ export default function App() {
                   className="px-5 py-3 rounded-2xl bg-white text-emerald-950 font-black text-xs sm:text-sm hover:bg-emerald-50 shadow-md transition-all cursor-pointer flex items-center gap-2"
                 >
                   <PlusCircle className="w-4 h-4 text-emerald-600" />
-                  <span>+ E'lon joylashtirish (3 ta rasm bilan)</span>
+                  <span>{t('heroPostBtn')}</span>
                 </button>
               </div>
             </div>
@@ -501,7 +503,7 @@ export default function App() {
             
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-gray-900 dark:text-white">
-                {totalCount} ta e'lon topildi
+                {totalCount} {t('adsFound')}
               </span>
 
               {activeFiltersCount > 0 && (
@@ -510,7 +512,7 @@ export default function App() {
                   className="flex items-center gap-1 text-xs text-rose-600 dark:text-rose-400 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-xl font-bold transition-colors cursor-pointer"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  Tozalash ({activeFiltersCount})
+                  {t('resetFilters')} ({activeFiltersCount})
                 </button>
               )}
             </div>
@@ -523,7 +525,7 @@ export default function App() {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition-colors cursor-pointer"
                 >
                   <MapPin className="w-3.5 h-3.5" />
-                  🗺️ Xarita
+                  🗺️ {t('mapView')}
                 </button>
                 <button
                   onClick={() => {
@@ -537,14 +539,14 @@ export default function App() {
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800 hover:bg-teal-100 transition-colors cursor-pointer"
                 >
                   <BarChart3 className="w-3.5 h-3.5 text-teal-600" />
-                  📊 Statistika
+                  📊 {t('statsView')}
                 </button>
                 <button
                   onClick={() => setTelegramBotOpen(true)}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800 hover:bg-sky-100 transition-colors cursor-pointer"
                 >
                   <Bot className="w-3.5 h-3.5 text-sky-500" />
-                  🤖 Telegram Bot
+                  🤖 {t('tgBot')}
                 </button>
                 <button
                   onClick={() => setFilterVip(!filterVip)}
@@ -555,7 +557,7 @@ export default function App() {
                   }`}
                 >
                   <Star className="w-3.5 h-3.5" />
-                  ⭐ VIP
+                  ⭐ {t('vipBadge')}
                 </button>
                 <button
                   onClick={() => setFilterUrgent(!filterUrgent)}
@@ -566,7 +568,7 @@ export default function App() {
                   }`}
                 >
                   <Zap className="w-3.5 h-3.5" />
-                  🔥 Shoshilinch
+                  🔥 {t('urgentBadge')}
                 </button>
                 <button
                   onClick={() => setFilterVideo(!filterVideo)}
@@ -577,7 +579,7 @@ export default function App() {
                   }`}
                 >
                   <Video className="w-3.5 h-3.5" />
-                  🎥 Videoli
+                  🎥 {t('videoBadge')}
                 </button>
               </div>
             </div>
@@ -596,7 +598,7 @@ export default function App() {
                       : 'text-gray-600 dark:text-slate-400'
                   }`}
                 >
-                  Barchasi
+                  {t('allConditions')}
                 </button>
                 <button
                   onClick={() => setCondition('new')}
@@ -606,7 +608,7 @@ export default function App() {
                       : 'text-gray-600 dark:text-slate-400'
                   }`}
                 >
-                  Yangi
+                  {t('conditionNew')}
                 </button>
                 <button
                   onClick={() => setCondition('used')}
@@ -616,7 +618,7 @@ export default function App() {
                       : 'text-gray-600 dark:text-slate-400'
                   }`}
                 >
-                  Ishlatilgan
+                  {t('conditionUsed')}
                 </button>
               </div>
 
@@ -626,8 +628,8 @@ export default function App() {
                 onChange={(e) => setCurrency(e.target.value)}
                 className="bg-gray-100 dark:bg-slate-800 border-none text-xs font-bold text-gray-700 dark:text-slate-300 px-3 py-2 rounded-xl focus:ring-2 focus:ring-emerald-500 cursor-pointer"
               >
-                <option value="">Barcha valyutalar</option>
-                <option value="UZS">UZS (so'm)</option>
+                <option value="">{t('currency')}: {t('allCategories')}</option>
+                <option value="UZS">UZS ({t('som')})</option>
                 <option value="USD">USD ($)</option>
               </select>
 
@@ -639,10 +641,10 @@ export default function App() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="bg-transparent border-none text-xs font-bold text-gray-800 dark:text-slate-200 focus:outline-none cursor-pointer pr-2"
                 >
-                  <option value="newest" className="dark:bg-slate-800">Eng yangilari</option>
-                  <option value="price_asc" className="dark:bg-slate-800">Eng arzon</option>
-                  <option value="price_desc" className="dark:bg-slate-800">Eng qimmat</option>
-                  <option value="views" className="dark:bg-slate-800">Eng ko'p ko'rilgan</option>
+                  <option value="newest" className="dark:bg-slate-800">{t('sortNewest')}</option>
+                  <option value="price_asc" className="dark:bg-slate-800">{t('sortPriceAsc')}</option>
+                  <option value="price_desc" className="dark:bg-slate-800">{t('sortPriceDesc')}</option>
+                  <option value="views" className="dark:bg-slate-800">{t('sortViewsDesc')}</option>
                 </select>
               </div>
 
@@ -709,10 +711,10 @@ export default function App() {
             </div>
             <div className="space-y-2 max-w-lg mx-auto">
               <h3 className="text-xl font-black text-gray-900 dark:text-white">
-                Hozircha saytda yangi e'lonlar yo'q
+                {t('noAdsFound')}
               </h3>
               <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 leading-relaxed">
-                Barcha eski namunalar tozalab tashlandi. Birinchi bo'lib o'zingiz sotmoqchi bo'lgan narsangizni (masalan: telefon, mashina, kvartira) <strong>kamida 5 ta rasm</strong> bilan sotuvga qo'ying!
+                {t('noAdsFoundDesc')}
               </p>
             </div>
             
@@ -730,7 +732,7 @@ export default function App() {
               className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-lg shadow-emerald-600/25 transition-all cursor-pointer inline-flex items-center gap-2 transform hover:-translate-y-0.5"
             >
               <Camera className="w-4 h-4" />
-              <span>+ Birinchi bo'lib e'lon joylashtirish</span>
+              <span>{t('heroPostBtn')}</span>
             </button>
           </div>
         ) : (

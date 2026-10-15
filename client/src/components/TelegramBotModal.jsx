@@ -222,13 +222,23 @@ export default function TelegramBotModal({ isOpen, onClose }) {
                         </button>
                       </form>
                     ) : (
-                      <p className="text-xs text-gray-500 dark:text-slate-400">
-                        Holat: {tgConnected ? (
-                          <span className="text-emerald-600 font-bold">🟢 Ulangan ({user?.telegram_username || '@Mdmnv_77'})</span>
-                        ) : (
-                          <span className="text-amber-500 font-bold">🟡 Ulanmagan</span>
-                        )}
-                      </p>
+                      <div className="text-xs space-y-1 mt-0.5">
+                        <p className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
+                          <span>🟢 Bot Serverda 24/7 Faol Ishlamoqda</span>
+                        </p>
+                        <p className="text-gray-600 dark:text-slate-400">
+                          Profil holati: {user ? (
+                            <span className="text-sky-600 dark:text-sky-400 font-bold">
+                              ✅ {user.username} ({user.telegram_username || '@Mdmnv_77'}) bot bilan bog'langan
+                            </span>
+                          ) : (
+                            <span className="text-amber-500 font-medium">
+                              (Mehmon rejimi — Telegram orqali xarid qilish uchun ochiq)
+                            </span>
+                          )}
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>

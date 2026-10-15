@@ -1,7 +1,10 @@
 import React from 'react';
 import { ShoppingBag, ShieldCheck, Heart, Send, PhoneCall } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer({ onSelectCategory, categories = [] }) {
+  const { lang, t } = useLanguage();
+
   return (
     <footer className="bg-slate-900 dark:bg-slate-950 text-slate-300 mt-20 border-t border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
@@ -18,17 +21,17 @@ export default function Footer({ onSelectCategory, categories = [] }) {
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              O'zbekistondagi eng qulay va zamonaviy e'lonlar platformasi. Uy-joy, avtomobil, elektronika va boshqa turdagi mahsulotlarni tez va xavfsiz sotib oling yoki soting.
+              {t('footerDesc')}
             </p>
             <div className="flex items-center gap-3 text-xs text-slate-400">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Xavfsiz va ishonchli savdo</span>
+              <span>{t('footerTrust')}</span>
             </div>
           </div>
 
           {/* Quick Categories */}
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Ommabop kategoriyalar</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">{t('popularCategories')}</h4>
             <ul className="space-y-2 text-xs">
               {categories.slice(0, 6).map(c => (
                 <li key={c.id}>
@@ -45,11 +48,11 @@ export default function Footer({ onSelectCategory, categories = [] }) {
 
           {/* Useful links */}
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Platforma Imkoniyatlari</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">{t('platformFeatures')}</h4>
             <ul className="space-y-2 text-xs text-slate-300">
               <li>🤖 Telegram Bot: <strong className="text-sky-400 font-bold">@Elon_Uz_009_bot</strong></li>
               <li>🗺️ O'zbekiston E'lonlar Xaritasi</li>
-              <li>📊 Sotuvchi Statistikasi & Analytics</li>
+              <li>📊 {t('sellerStats')} & Analytics</li>
               <li>💬 Jonli Chat & Ovozli Xabarlar</li>
               <li>🚚 Viloyatlararo Yetkazib berish Kalkulyatori</li>
             </ul>
@@ -57,7 +60,7 @@ export default function Footer({ onSelectCategory, categories = [] }) {
 
           {/* Contacts & Support */}
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Qo'llab-quvvatlash</h4>
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4">{t('support')}</h4>
             <div className="space-y-3 text-xs text-slate-400">
               <div className="flex items-center gap-2">
                 <PhoneCall className="w-4 h-4 text-emerald-400" />
@@ -81,11 +84,10 @@ export default function Footer({ onSelectCategory, categories = [] }) {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 E'lonUZ Marketplace. Barcha huquqlar himoyalangan.</p>
+          <p>© 2026 E'lonUZ Marketplace. {t('allRightsReserved')}</p>
           <p className="flex items-center gap-1">
-            <span>Yaratildi</span>
+            <span>{t('madeWithLove')}</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-current inline" />
-            <span>bilan O'zbekiston uchun</span>
           </p>
         </div>
       </div>

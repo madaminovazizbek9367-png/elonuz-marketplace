@@ -105,7 +105,7 @@ export default function Navbar({
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200/80 dark:border-slate-800 shadow-xs transition-colors duration-200">
-      <div className="max-w-[1500px] mx-auto px-3 sm:px-5 lg:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 gap-3">
           
           {/* Logo */}
@@ -123,14 +123,14 @@ export default function Navbar({
                   E'lon<span className="text-emerald-600">UZ</span>
                 </span>
                 <span className="text-[10px] font-semibold text-gray-400 dark:text-gray-400 tracking-wider uppercase -mt-1">
-                  E'lonlar sayti
+                  {t('brandSubtitle')}
                 </span>
               </div>
             </a>
           </div>
 
           {/* Search bar & Location dropdown */}
-          <div className="hidden md:flex flex-1 max-w-2xl items-center bg-gray-100/90 dark:bg-slate-800/90 rounded-2xl border border-gray-200/80 dark:border-slate-700/80 focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-slate-850 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all p-1.5">
+          <div className="hidden md:flex flex-1 max-w-xl lg:max-w-2xl items-center bg-gray-100/90 dark:bg-slate-800/90 rounded-2xl border border-gray-200/80 dark:border-slate-700/80 focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-slate-850 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all p-1.5">
             <div className="flex items-center pl-3 pr-2 text-gray-400 dark:text-gray-400">
               <Search className="w-5 h-5" />
             </div>
@@ -176,22 +176,37 @@ export default function Navbar({
               onClick={onSearchSubmit}
               className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition-colors cursor-pointer shrink-0 ml-1"
             >
-              Qidirish
+              {t('searchBtn')}
             </button>
           </div>
 
           {/* Right actions */}
           <div className="flex items-center gap-1.5 sm:gap-2">
             
-            {/* Language Switcher Button (UZ / RU) */}
-            <button
-              onClick={toggleLanguage}
-              title="Tilni o'zgartirish (O'zbekcha / Русский)"
-              className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-black rounded-2xl bg-gray-100 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 text-gray-700 dark:text-slate-200 hover:text-emerald-600 border border-gray-200/80 dark:border-slate-700 cursor-pointer transition-all"
-            >
-              <Globe className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{lang.toUpperCase()}</span>
-            </button>
+            {/* Language Switcher Button (UZ / RU / EN) */}
+            <div className="flex items-center rounded-2xl bg-gray-100 dark:bg-slate-800 p-0.5 border border-gray-200/80 dark:border-slate-700">
+              {['uz', 'ru', 'en'].map((l) => (
+                <button
+                  key={l}
+                  onClick={() => toggleLanguage ? (lang === l ? null : (l === 'uz' ? toggleLanguage() : toggleLanguage())) : null}
+                  onMouseDown={() => {
+                    const ctx = window.__setLang;
+                    if (ctx) ctx(l);
+                  }}
+                  className={`px-2 py-1 text-[11px] font-black rounded-xl transition-all cursor-pointer uppercase ${
+                    lang === l
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-gray-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
+                  }`}
+                  onClickCapture={() => {
+                    localStorage.setItem('marketplace_lang', l);
+                    window.location.reload();
+                  }}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
 
             {/* Yetkazib berish (Delivery Calculator) */}
             <button
@@ -240,11 +255,11 @@ export default function Navbar({
             {/* Telegram Bot Modal Trigger */}
             <button
               onClick={onOpenTelegramBot}
-              title="E'lonUZ Rasmiy Telegram Boti (@ElonUz_Bozor_Bot)"
+              title="E'lonUZ Rasmiy Telegram Boti (@Elon_Uz_009_bot)"
               className="flex items-center gap-1.5 p-2 px-3 text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-2xl transition-all cursor-pointer border border-sky-200 dark:border-sky-800 text-xs font-bold whitespace-nowrap shrink-0 shadow-2xs"
             >
               <Bot className="w-4 h-4 text-sky-500 shrink-0" />
-              <span className="hidden sm:inline whitespace-nowrap">🤖 Bot</span>
+              <span className="hidden sm:inline whitespace-nowrap">🤖 {t('tgBot')}</span>
             </button>
 
             {/* Telegram Lichka: @Mdmnv_77 */}
@@ -344,7 +359,7 @@ export default function Navbar({
                       className="w-full text-left px-4 py-2.5 text-xs text-gray-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 hover:text-emerald-700 dark:hover:text-emerald-400 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
                       <User className="w-4 h-4 text-gray-400" />
-                      Mening profilim
+                      {t('myProfile')}
                     </button>
 
                     <button
@@ -355,7 +370,7 @@ export default function Navbar({
                       className="w-full text-left px-4 py-2.5 text-xs text-gray-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800 hover:text-emerald-700 dark:hover:text-emerald-400 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
                       <ShoppingBag className="w-4 h-4 text-gray-400" />
-                      Mening e'lonlarim
+                      {t('myListings')}
                     </button>
 
                     <button
@@ -366,7 +381,7 @@ export default function Navbar({
                       className="w-full text-left px-4 py-2.5 text-xs text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-800 flex items-center gap-2.5 font-bold transition-colors cursor-pointer"
                     >
                       <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      📊 Sotuvchi Statistikasi
+                      📊 {t('sellerStats')}
                     </button>
 
                     {user.role === 'admin' && (
@@ -378,7 +393,7 @@ export default function Navbar({
                         className="w-full text-left px-4 py-2.5 text-xs text-indigo-700 dark:text-indigo-400 bg-indigo-50/60 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 flex items-center gap-2.5 font-semibold transition-colors cursor-pointer"
                       >
                         <ShieldAlert className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                        Admin Boshqaruv Paneli
+                        {t('adminPanel')}
                       </button>
                     )}
 
@@ -391,7 +406,7 @@ export default function Navbar({
                         className="w-full text-left px-4 py-2.5 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-slate-800 flex items-center gap-2.5 transition-colors cursor-pointer font-semibold"
                       >
                         <LogOut className="w-4 h-4" />
-                        Chiqish
+                        {t('logout')}
                       </button>
                     </div>
                   </div>
@@ -403,7 +418,7 @@ export default function Navbar({
                 className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 px-3.5 py-2.5 rounded-2xl transition-colors cursor-pointer border border-emerald-200 dark:border-emerald-800 whitespace-nowrap shrink-0 flex items-center gap-1.5"
               >
                 <User className="w-3.5 h-3.5 shrink-0" />
-                <span className="whitespace-nowrap">Ro'yxatdan o'tish / Kirish</span>
+                <span className="whitespace-nowrap">{t('authButton')}</span>
               </button>
             )}
 
@@ -419,7 +434,7 @@ export default function Navbar({
               className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-2xl shadow-md shadow-emerald-600/25 hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 shrink-0"
             >
               <PlusCircle className="w-4 h-4" />
-              <span className="hidden xs:inline">E'lon berish</span>
+              <span className="hidden xs:inline">{t('postAd')}</span>
             </button>
 
             {/* Mobile menu hamburger */}

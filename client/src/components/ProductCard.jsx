@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, MapPin, Eye, Phone, Calendar, CheckCircle2, Star, Video, Zap, Sparkles, Scale } from 'lucide-react';
 import PriceAnalyticsBadge from './PriceAnalyticsBadge';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ProductCard({
   product,
@@ -11,16 +12,18 @@ export default function ProductCard({
   onToggleCompare,
   isCompared
 }) {
+  const { lang, t } = useLanguage();
+
   const formatPrice = (price, currency) => {
-    const formatted = new Intl.NumberFormat('uz-UZ').format(price);
-    return currency === 'USD' ? `$${formatted}` : `${formatted} so'm`;
+    const formatted = new Intl.NumberFormat(lang === 'en' ? 'en-US' : (lang === 'ru' ? 'ru-RU' : 'uz-UZ')).format(price);
+    return currency === 'USD' ? `$${formatted}` : `${formatted} ${t('som')}`;
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
     try {
       const d = new Date(dateString);
-      return d.toLocaleDateString('uz-UZ', { day: 'numeric', month: 'short' });
+      return d.toLocaleDateString(lang === 'en' ? 'en-US' : (lang === 'ru' ? 'ru-RU' : 'uz-UZ'), { day: 'numeric', month: 'short' });
     } catch {
       return '';
     }
@@ -62,7 +65,7 @@ export default function ProductCard({
           {product.is_urgent ? (
             <span className="text-[10px] font-black px-2 py-1 rounded-xl bg-rose-600 text-white flex items-center gap-0.5 shadow-md shadow-rose-600/30 animate-pulse">
               <Zap className="w-3 h-3 fill-current" />
-              SHOSHILINCH
+              {t('urgentBadge').toUpperCase()}
             </span>
           ) : null}
 
@@ -71,7 +74,7 @@ export default function ProductCard({
               ? 'bg-emerald-600/90 text-white'
               : 'bg-gray-900/80 text-gray-100'
           }`}>
-            {product.condition === 'new' ? 'Yangi' : 'Ishlatilgan'}
+            {product.condition === 'new' ? t('conditionNew') : t('conditionUsed')}
           </span>
         </div>
 
