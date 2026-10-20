@@ -365,6 +365,16 @@
   ],
   "reviews": [
     {
+      "id": 1792502839637,
+      "seller_id": 1791205366862,
+      "reviewer_id": 1792501976440,
+      "reviewer_username": "Azizbe77",
+      "reviewer_avatar": "https://api.dicebear.com/7.x/initials/svg?seed=Azizbe77",
+      "rating": 1,
+      "comment": "iphone 20 hali chiqmadiku qaydan bersizlar sotib olsam e gnd lar saytting s.....",
+      "created_at": "2026-10-20T13:27:19.637Z"
+    },
+    {
       "id": 1791980135869,
       "seller_id": 1791210926698,
       "reviewer_id": 1791205366862,
