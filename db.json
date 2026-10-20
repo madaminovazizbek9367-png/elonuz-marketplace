@@ -153,6 +153,214 @@
       "extra_details": "{}",
       "views": 1,
       "created_at": "2026-10-20T13:36:06.021Z"
+    },
+    {
+      "id": 101,
+      "user_id": 1,
+      "title": "Chevrolet Cobalt 4-pozitsiya Elegant AT, 2024",
+      "category_id": 2,
+      "price": 13200,
+      "old_price": 13800,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Toshkent",
+      "description": "Yangi 2024 yil Chevrolet Cobalt Style/Elegant avtomat uzatmalar qutisi. Kraska toza 100%, salondan to'g'ri olib chiqilgan, probegi 1,200 km. Tonirovka ruxsati bor, Magicar 908 pult, yaxshi chexol va poliklar o'rnatilgan. Xarid qilgan odam mazza qilib minadi.",
+      "primary_image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 1,
+      "is_urgent": 1,
+      "video_url": null,
+      "views": 142,
+      "created_at": "2026-10-20T13:52:54.971Z"
+    },
+    {
+      "id": 102,
+      "user_id": 1,
+      "title": "iPhone 15 Pro Max 256GB Natural Titanium (LL/A)",
+      "category_id": 3,
+      "price": 1050,
+      "old_price": 1150,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Toshkent",
+      "description": "Ideal holatdagi iPhone 15 Pro Max 256GB, rangi Natural Titanium. Batareya quvvati 100%, qutisi, kabeli barcha hujjatlari bor. UZIMEI ikkala sim karta uchun to'liq ro'yxatdan o'tgan. Birinchi qo'l, qirilgan yoki chizilgan joyi yo'q.",
+      "primary_image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 1,
+      "is_urgent": 0,
+      "video_url": null,
+      "views": 289,
+      "created_at": "2026-10-20T11:52:54.972Z"
+    },
+    {
+      "id": 103,
+      "user_id": 1,
+      "title": "Chilonzor 9-mavze, 2 xonali kvartira, 60m², Yevroremont",
+      "category_id": 1,
+      "price": 54000,
+      "old_price": 57000,
+      "currency": "USD",
+      "condition": "used",
+      "location": "Toshkent",
+      "description": "Chilonzor 9-mavzeda joylashgan shinam 2 xonali kvartira sotiladi. 4 qavatli g'ishtli uyning 2-qavati. Sifatli yevroremont qilingan, barcha mebel va maishiy texnikasi bilan qoldiriladi. Metro bekatiga piyoda 7 daqiqalik yo'l. Maktab va bog'cha yonida.",
+      "primary_image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 0,
+      "is_urgent": 1,
+      "video_url": null,
+      "views": 310,
+      "created_at": "2026-10-20T09:52:54.972Z"
+    },
+    {
+      "id": 104,
+      "user_id": 1,
+      "title": "MacBook Pro 14\" M3 Pro (18GB / 512GB SSD) Space Black",
+      "category_id": 4,
+      "price": 1750,
+      "old_price": 1890,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Samarqand",
+      "description": "Yangi Apple MacBook Pro 14 M3 Pro protsessorli noutbuk. Rang: Space Black. 18GB birlashgan xotira, 512GB tezkor SSD disk. Tsikl batareyasi 12 ta. Dasturchilar, dizaynerlar va video montajchilar uchun eng mukammal noutbuk. Kafolat muddati mavjud.",
+      "primary_image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 1,
+      "is_urgent": 0,
+      "video_url": null,
+      "views": 95,
+      "created_at": "2026-10-20T07:52:54.972Z"
+    },
+    {
+      "id": 105,
+      "user_id": 1,
+      "title": "Samsung 65\" QLED 4K Smart TV (2024 Model)",
+      "category_id": 5,
+      "price": 750,
+      "old_price": 850,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Buxoro",
+      "description": "Samsung 65 dyuymli QLED 4K Smart televizor. Yangi qutida ochilmagan. Quantum HDR, 120Hz yangilanish chastotasi, ajoyib tiniq ranglar. YouTube, Netflix, barcha ilovalar chaqqon ishlaydi. 1 yil rasmiy servis kafolati bor.",
+      "primary_image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 0,
+      "is_urgent": 1,
+      "video_url": null,
+      "views": 78,
+      "created_at": "2026-10-20T03:52:54.972Z"
+    },
+    {
+      "id": 106,
+      "user_id": 1,
+      "title": "Zamonaviy yumshoq burchak divan (Transformator)",
+      "category_id": 6,
+      "price": 4500000,
+      "old_price": 5200000,
+      "currency": "UZS",
+      "condition": "new",
+      "location": "Toshkent",
+      "description": "Sifatli va qulay burchak divan. Ochiladi va keng yotoq bo'ladi. Ichida katta yashiklari bor. Mato suv o'tkazmaydigan antibakterial velur. O'lchami 280x160 sm. Toshkent shahar ichida yetkazib berish bepul!",
+      "primary_image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 0,
+      "is_urgent": 0,
+      "video_url": null,
+      "views": 112,
+      "created_at": "2026-10-20T01:52:54.972Z"
+    },
+    {
+      "id": 107,
+      "user_id": 1,
+      "title": "Sony PlayStation 5 Slim 1TB + 2 ta DualSense djoystik",
+      "category_id": 8,
+      "price": 520,
+      "old_price": 580,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Toshkent",
+      "description": "Yangi PS5 Slim versiyasi 1TB xotira bilan. Komplektda 2 ta original djoystik va 3 ta mashhur o'yinlar sovg'aga beriladi. Hech qanday muammosi yo'q, yangi qutida.",
+      "primary_image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 1,
+      "is_urgent": 0,
+      "video_url": null,
+      "views": 340,
+      "created_at": "2026-10-19T23:52:54.972Z"
+    },
+    {
+      "id": 108,
+      "user_id": 1,
+      "title": "BMW M5 F90 Competition, 2021 yil, Toza",
+      "category_id": 2,
+      "price": 79000,
+      "old_price": 84000,
+      "currency": "USD",
+      "condition": "used",
+      "location": "Toshkent",
+      "description": "BMW M5 F90 Competition. 4.4L Twin-Turbo V8, 625 ot kuchi. Holati a'lo darajada, to'liq zirhli plyonka (antigraviy) qilingan. Harman Kardon audio tizim, keramika tormozlar. Real xaridorga ozgina kelishtiriladi.",
+      "primary_image": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&auto=format&fit=crop&q=80",
+      "images": [
+        {
+          "image_url": "https://images.unsplash.com/photo-1617788138017-80ad40651399?w=800&auto=format&fit=crop&q=80",
+          "is_primary": 1
+        }
+      ],
+      "is_vip": 1,
+      "is_top": 1,
+      "is_urgent": 1,
+      "video_url": null,
+      "views": 520,
+      "created_at": "2026-10-19T21:52:54.972Z"
     }
   ],
   "favorites": [],
