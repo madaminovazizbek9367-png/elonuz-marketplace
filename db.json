@@ -171,37 +171,8 @@
       "is_top": 1,
       "is_urgent": 0,
       "video_url": null,
-      "views": 289,
+      "views": 290,
       "created_at": "2026-10-20T11:52:54.972Z"
-    },
-    {
-      "id": 103,
-      "user_id": 1,
-      "title": "Chilonzor 9-mavze, 2 xonali kvartira, 60m², Yevroremont",
-      "category_id": 1,
-      "price": 54000,
-      "old_price": 57000,
-      "currency": "USD",
-      "condition": "used",
-      "location": "Toshkent",
-      "description": "Chilonzor 9-mavzeda joylashgan shinam 2 xonali kvartira sotiladi. 4 qavatli g'ishtli uyning 2-qavati. Sifatli yevroremont qilingan, barcha mebel va maishiy texnikasi bilan qoldiriladi. Metro bekatiga piyoda 7 daqiqalik yo'l. Maktab va bog'cha yonida.",
-      "primary_image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
-      "images": [
-        {
-          "image_url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
-          "is_primary": 1
-        },
-        {
-          "image_url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&auto=format&fit=crop&q=80",
-          "is_primary": 0
-        }
-      ],
-      "is_vip": 1,
-      "is_top": 0,
-      "is_urgent": 1,
-      "video_url": null,
-      "views": 312,
-      "created_at": "2026-10-20T09:52:54.972Z"
     },
     {
       "id": 108,
