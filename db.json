@@ -275,33 +275,8 @@
       "is_top": 0,
       "is_urgent": 0,
       "video_url": null,
-      "views": 112,
+      "views": 113,
       "created_at": "2026-10-20T01:52:54.972Z"
-    },
-    {
-      "id": 107,
-      "user_id": 1,
-      "title": "Sony PlayStation 5 Slim 1TB + 2 ta DualSense djoystik",
-      "category_id": 8,
-      "price": 520,
-      "old_price": 580,
-      "currency": "USD",
-      "condition": "new",
-      "location": "Toshkent",
-      "description": "Yangi PS5 Slim versiyasi 1TB xotira bilan. Komplektda 2 ta original djoystik va 3 ta mashhur o'yinlar sovg'aga beriladi. Hech qanday muammosi yo'q, yangi qutida.",
-      "primary_image": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&auto=format&fit=crop&q=80",
-      "images": [
-        {
-          "image_url": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800&auto=format&fit=crop&q=80",
-          "is_primary": 1
-        }
-      ],
-      "is_vip": 1,
-      "is_top": 1,
-      "is_urgent": 0,
-      "video_url": null,
-      "views": 342,
-      "created_at": "2026-10-19T23:52:54.972Z"
     },
     {
       "id": 108,
