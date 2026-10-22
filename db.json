@@ -350,6 +350,18 @@
       "audio_url": null,
       "is_read": 0,
       "created_at": "2026-10-22T12:24:16.469Z"
+    },
+    {
+      "id": 1792671878303,
+      "sender_id": 1792503210513,
+      "receiver_id": 1,
+      "product_id": 1792678631834,
+      "content": "DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0",
+      "message": "DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0DOSTAVKA0",
+      "msg_type": "text",
+      "audio_url": null,
+      "is_read": 0,
+      "created_at": "2026-10-22T12:24:38.303Z"
     }
   ],
   "reviews": [
