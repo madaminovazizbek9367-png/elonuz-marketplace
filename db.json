@@ -225,58 +225,8 @@
       "is_top": 1,
       "is_urgent": 0,
       "video_url": null,
-      "views": 95,
+      "views": 96,
       "created_at": "2026-10-20T07:52:54.972Z"
-    },
-    {
-      "id": 105,
-      "user_id": 1,
-      "title": "Samsung 65\" QLED 4K Smart TV (2024 Model)",
-      "category_id": 5,
-      "price": 750,
-      "old_price": 850,
-      "currency": "USD",
-      "condition": "new",
-      "location": "Buxoro",
-      "description": "Samsung 65 dyuymli QLED 4K Smart televizor. Yangi qutida ochilmagan. Quantum HDR, 120Hz yangilanish chastotasi, ajoyib tiniq ranglar. YouTube, Netflix, barcha ilovalar chaqqon ishlaydi. 1 yil rasmiy servis kafolati bor.",
-      "primary_image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=80",
-      "images": [
-        {
-          "image_url": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800&auto=format&fit=crop&q=80",
-          "is_primary": 1
-        }
-      ],
-      "is_vip": 0,
-      "is_top": 0,
-      "is_urgent": 1,
-      "video_url": null,
-      "views": 78,
-      "created_at": "2026-10-20T03:52:54.972Z"
-    },
-    {
-      "id": 106,
-      "user_id": 1,
-      "title": "Zamonaviy yumshoq burchak divan (Transformator)",
-      "category_id": 6,
-      "price": 4500000,
-      "old_price": 5200000,
-      "currency": "UZS",
-      "condition": "new",
-      "location": "Toshkent",
-      "description": "Sifatli va qulay burchak divan. Ochiladi va keng yotoq bo'ladi. Ichida katta yashiklari bor. Mato suv o'tkazmaydigan antibakterial velur. O'lchami 280x160 sm. Toshkent shahar ichida yetkazib berish bepul!",
-      "primary_image": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80",
-      "images": [
-        {
-          "image_url": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80",
-          "is_primary": 1
-        }
-      ],
-      "is_vip": 0,
-      "is_top": 0,
-      "is_urgent": 0,
-      "video_url": null,
-      "views": 113,
-      "created_at": "2026-10-20T01:52:54.972Z"
     },
     {
       "id": 108,
@@ -300,7 +250,7 @@
       "is_top": 1,
       "is_urgent": 1,
       "video_url": null,
-      "views": 521,
+      "views": 522,
       "created_at": "2026-10-19T21:52:54.972Z"
     }
   ],
