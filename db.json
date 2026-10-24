@@ -87,6 +87,40 @@
   ],
   "products": [
     {
+      "id": 1792855091296,
+      "user_id": 1791210926698,
+      "title": "nexia 2",
+      "category_id": 2,
+      "price": 8000,
+      "old_price": null,
+      "currency": "USD",
+      "condition": "new",
+      "location": "Namangan",
+      "description": "500 km yurgan  kraska 15%  yili 2026",
+      "primary_image": "https://a1.drive-data.ru/7U0yAt1qnS68AI8WbiGpXZUBsUo-960.jpg",
+      "images": [
+        {
+          "image_url": "https://a1.drive-data.ru/7U0yAt1qnS68AI8WbiGpXZUBsUo-960.jpg",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://i.pinimg.com/originals/8d/c2/0a/8dc20a4447499548d52e6731ae918d08.jpg?nii=thttps://i.pinimg.com/originals/8d/c2/0a/8dc20a4447499548d52e6731ae918d08.jpg?nii=t",
+          "is_primary": 0
+        },
+        {
+          "image_url": "https://i-a.drive-data.ru/awAAAgFHOuA-1920.jpg",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 0,
+      "is_urgent": 0,
+      "video_url": "https://youtu.be/9XwyQUCPSwc?t=23",
+      "extra_details": "{}",
+      "views": 0,
+      "created_at": "2026-10-24T15:18:11.297Z"
+    },
+    {
       "id": 1792678631834,
       "user_id": 1,
       "title": "MOL ANGUS",
