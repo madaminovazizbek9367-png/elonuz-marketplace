@@ -87,6 +87,40 @@
   ],
   "products": [
     {
+      "id": 1792848685096,
+      "user_id": 1792503210513,
+      "title": "Qishloqdagi Jin",
+      "category_id": 13,
+      "price": 500,
+      "old_price": null,
+      "currency": "USD",
+      "condition": "used",
+      "location": "Toshkent",
+      "description": "Bu shunchaki jin emas... Bu — QISHLOQDAGI JIN! 😱🔥\n\nU oddiy jin emas, u sizning hayotingizni o‘zgartiradigan noyob imkoniyat! 100% sifat, 0% kafolat. Hozir sotib oling va hayotingizga sirli energiya olib kiring! 👻\n\nShoshiling! Bunday imkoniyat har kuni uchramaydi! 🚀",
+      "primary_image": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.IwfCKBpMN7UCZA1xymOnvwHaEK%3Fr%3D0%26pid%3DApi&sp=1792847825T22edba5bb74e77d308a4e01cf1109c3be066ad2cea2741ed447cc518a5893c54",
+      "images": [
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.IwfCKBpMN7UCZA1xymOnvwHaEK%3Fr%3D0%26pid%3DApi&sp=1792847825T22edba5bb74e77d308a4e01cf1109c3be066ad2cea2741ed447cc518a5893c54",
+          "is_primary": 1
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.HlkJ5KqwRHBwcZVFeZcGZQHaEK%3Fr%3D0%26pid%3DApi&sp=1792848040Tb65e88d725502f98741780767334ba72b7cac527baa438ff36b787ef8f80f460",
+          "is_primary": 0
+        },
+        {
+          "image_url": "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.C4W9dcTgBogKPKHDEvveGgHaEK%3Fr%3D0%26pid%3DApi&sp=1792848040Tb2d54b30cc717e08c4a9152ef500067fa5572879581b0d87322cae11458211ff",
+          "is_primary": 0
+        }
+      ],
+      "is_vip": 0,
+      "is_top": 0,
+      "is_urgent": 0,
+      "video_url": null,
+      "extra_details": "{}",
+      "views": 0,
+      "created_at": "2026-10-24T13:31:25.096Z"
+    },
+    {
       "id": 1792855091296,
       "user_id": 1791210926698,
       "title": "nexia 2",
